@@ -1,0 +1,55 @@
+# 通过 volume 把外部目录映射到容器内；
+# 容器内的路径统一命名，不再变化。
+
+# 代号
+PROJ_CODE_NAME=projcode
+# 项目顶级目录
+PROJ_GIT_DIR=/usr/service/src
+# 项目日志目录
+PROJ_LOG_DIR=/usr/service/log
+# 服务域名
+PROJ_DOMAIN=projcode.firmcode.com
+
+# python 版本
+#PROJ_PYTHON_VER
+# python 环境
+#PROJ_PYTHON_ENV
+# python 路径
+PROJ_PYTHON_DIR=/usr/local/bin
+# python & pip 可执行文件
+PROJ_PYTHON=/usr/local/bin/python3
+PROJ_PIP=/usr/local/bin/pip3
+
+# 后端服务自带的静态资源（URL 前缀、存储路径）
+PROJ_STATIC_URL=/be/static/
+PROJ_STATIC_DIR=/usr/service/web
+# 前端资源
+PROJ_WEB_DIR=/usr/service/src/www/projcode/dist
+
+# 标识数据库 MySQL 配置
+PROJ_MYSQL_ENABLE=False
+PROJ_MYSQL_DEFAULT=mysql://USERNAME:PASSWORD@HOST:PORT/DBNAME?charset=utf8mb4
+PROJ_MYSQL_MODE=NO_AUTO_CREATE_USER
+PROJ_MYSQL_DRIVER=import pymysql; pymysql.install_as_MySQLdb()
+
+# raven(sentry)配置
+PROJ_RAVEN_DSN=
+
+# 运行服务的帐号
+PROJ_USER=root
+
+# web 容器
+PROJ_WEB_UPSTREAM=projcode
+PROJ_WEB_PORT=8000
+PROJ_WEB_PASS=uwsgi_pass
+PROJ_WEB_PASS_INCLUDE=uwsgi_params
+
+# uwsgi 配置文件
+PROJ_UWSGI_WITH_VENV=#
+PROJ_UWSGI_INI=/usr/service/conf/uwsgi.ini
+
+# supervisor 配置文件
+PROJ_SUPERVISOR_CONF=/usr/service/conf/supervisor.conf
+
+# nginx 配置文件
+PROJ_NGINX_CONF=/usr/service/conf/nginx/server.conf

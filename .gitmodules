@@ -1,0 +1,3 @@
+[submodule "libs/applus"]
+	path = libs/applus
+	url = git@github.com:/princeofdatamining/python-applus.git

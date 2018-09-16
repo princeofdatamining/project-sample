@@ -1,0 +1,9 @@
+Django
+djangorestframework
+django-filter
+raven
+tzlocal
+six
+PyMySQL
+PyYAML
+requests
