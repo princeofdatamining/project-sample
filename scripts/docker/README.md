@@ -7,6 +7,7 @@
 ```shell
 sudo yum install -y wget curl git
 
+# 按需安装 docker, docker-compose
 curl -fsSL https://get.docker.com/ | sh
 sudo curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
@@ -18,11 +19,11 @@ sudo chmod +x /usr/local/bin/docker-compose
 
     ```shell
     cat <<EOF > .gitrc
-    # 项目 Git 仓库
+    # 项目 Git 仓库(本机需要公钥并在 git 服务中登记)
     PROJ_GIT_URL=git@github.com:princeofdatamining/project-sample.git
     # 项目 Git 版本分支
     PROJ_GIT_BRANCH=master
-    # 项目 Git 目录
+    # 项目 Git 目录(目录、权限依赖于运维或开发规范，不在应用中涉及)
     PROJ_GIT_DIR=/firmcode/teamcode/projcode/src
     EOF
     ```
@@ -35,10 +36,10 @@ sudo chmod +x /usr/local/bin/docker-compose
     cat <<'EOF' | bash
     . .gitrc # 引入环境变量
     
-    # 【创建】下载目录
+    # 【创建】下载目录(目录、权限依赖于运维或开发规范，不在应用中涉及)
     mkdir -p $PROJ_GIT_DIR
     
-    # 【创建】克隆指定版本
+    # 【创建】克隆指定版本(请在新的环境上操作，不考虑项目是否存在、是否统一项目)
     git clone --recursive -b $PROJ_GIT_BRANCH $PROJ_GIT_URL $PROJ_GIT_DIR
     
     # .gitrc 移到下载目录下
