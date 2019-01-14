@@ -2,13 +2,10 @@
 . .projrc
 
 # 工作目录
-cd $PROJ_GIT_DIR
-
-# 日志目录
-mkdir -p $PROJ_LOG_DIR
+cd ${PROJ_GIT_DIR}
 
 # 项目配置
-bash scripts/base/environ.sh.py
+. scripts/base/environ.py.sh
 
-# 静态资源
-$PROJ_PYTHON manage.py collectstatic --noinput
+# 收集静态资源存至指定目录(部署时处理)
+${PROJ_PYTHON} manage.py collectstatic --noinput

@@ -1,6 +1,9 @@
 # 环境变量
 . .projrc
 
+# 工作目录
+cd ${PROJ_GIT_DIR}
+
 APPS=""
 
 listall() {
@@ -24,4 +27,4 @@ for package in `ls libs`; do
     fi
 done
 
-python manage.py test $APPS
+${PROJ_PYTHON} manage.py test $APPS

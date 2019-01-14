@@ -1,0 +1,39 @@
+
+# 产品/项目名称
+
+# 小组代号
+GROUP_CODENAME=test
+# 项目代号
+PROJ_CODENAME=sample
+
+# 如果需要 pyenv 则需要设置：python 版本、虚拟环境名、pyenv 虚拟环境目录；
+# 否则可跳过
+PROJ_PYTHON_VER=3.6.6
+PROJ_PYTHON_ENV=${PROJ_CODENAME}
+PROJ_PYTHON_BIN="/cnicg/app/pyenv/versions/${PROJ_PYTHON_ENV}/bin"
+
+# 如果不使用 pyenv，则需要设置对应的 python、pip 路径；
+# 否则可跳过
+PROJ_PYTHON="${PROJ_PYTHON_BIN}/python3"
+PROJ_PIP="${PROJ_PYTHON_BIN}/pip3"
+
+# 静态资源 URL 及目录
+STATIC_URL=/be/static/
+STATIC_ROOT="/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/web"
+
+# 日志
+PROJ_LOG_DIR="/cnicg/logs/${GROUP_CODENAME}/${PROJ_CODENAME}"
+PROG_LOG_FILE="${PROJ_LOG_DIR}/root.log"
+
+# raven(sentry)
+RAVEN_DSN=""
+
+# 容器运行端口
+PROJ_WEB_PORT=8000
+# 前端代码目录
+PUB_WWW_ROOT="${PROJ_GIT_DIR}/www/default/dist"
+# 域名
+PROJ_DOMAIN="${PROJ_CODENAME}.${GROUP_CODENAME}.work.com"
+
+# 数据库连接配置
+DB_URI="mysql:///db_${GROUP_CODENAME}_${PROJ_CODENAME}"

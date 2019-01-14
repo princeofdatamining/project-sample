@@ -2,4 +2,4 @@
 . .projrc
 
 # python 虚拟环境
-pyenv virtualenv $PROJ_PYTHON_VER $PROJ_PYTHON_ENV
+[ -n "${PROJ_PYTHON_ENV}" ] && [ ! -f "${PROJ_PYTHON}" ] && pyenv virtualenv ${PROJ_PYTHON_VER} ${PROJ_PYTHON_ENV}
