@@ -1,4 +1,4 @@
-cat <<EOF > scripts/host/supervisor.conf
+. .projrc && cat <<EOF > scripts/host/supervisor.conf
 ;[group:${PROJ_CODENAME}]
 ;programs = ${PROJ_CODENAME}, ${PROJ_CODENAME}_work, ${PROJ_CODENAME}_beat
 
@@ -30,8 +30,8 @@ stdout_logfile = ${PROJ_LOG_DIR}/supervisor.log
 ;stdout_logfile = ${PROJ_LOG_DIR}/celery-beat.log
 
 ;[program:${PROJ_CODENAME}_nuxt]
-;command = /cnicg/app/nvm/versions/node/v6.12.2/bin/node ${PUB_WWW_ROOT}/node_modules/.bin/nuxt start
-;directory = ${PUB_WWW_ROOT}
+;command = ${NUXT_NODE_BIN} ${NUXT_WEB_PATH}/node_modules/.bin/nuxt start
+;directory = ${NUXT_WEB_PATH}
 ;user = $(whoami)
 ;autostart = true
 ;autorestart = true

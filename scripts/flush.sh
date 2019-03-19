@@ -6,31 +6,30 @@ echo "##### check python / pyenv ..."
 [[ $@ =~ "--to-pyenv" ]] && exit 0
 
 # 安装依赖
-if [[ ! $@ =~ "--no-pip" ]]; then
+[[ $@ =~ "--no-pip" ]] && exit 0
 echo "##### check libraries ..."
 . scripts/host/02-pip.sh
 . scripts/base/02-pip.sh
 . scripts/dev/40-submodules.sh
-fi
+[[ $@ =~ "--to-pip" ]] && exit 0
 
 # 更新项目配置
-if [[ ! $@ =~ "--no-environ" ]]; then
+[[ $@ =~ "--no-environ" ]] && exit 0
 echo "##### update environ ..."
-mkdir -p $PROJ_LOG_DIR
 . scripts/base/03-environ.sh
-fi
+[[ $@ =~ "--to-environ" ]] && exit 0
 
 # 更新数据
-if [[ ! $@ =~ "--no-prepare" ]]; then
+[[ $@ =~ "--no-prepare" ]] && exit 0
 echo "##### prepare data ..."
 . scripts/base/10-prepare.sh
-fi
+[[ $@ =~ "--to-prepare" ]] && exit 0
 
 # 系统服务配置
-if [[ ! $@ =~ "--no-servconf" ]]; then
+[[ $@ =~ "--no-servconf" ]] && exit 0
 echo "##### update uwsgi & supervisor & nginx configuration"
 . scripts/host/19-uwsgi.sh
 . scripts/host/19-supervisor.sh
 . scripts/host/19-nginx.sh
 # scripts/host/19-nuxt.sh
-fi
+[[ $@ =~ "--to-servconf" ]] && exit 0

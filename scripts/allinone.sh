@@ -75,22 +75,6 @@ fi
 # 也可以采用其他方式：http/scp 等等
 
 
-# 应用项目配置
-source "${ENVIRON_RC}"
-###### .projrc ######
-if ! command grep -qc '/.gitrc' "${ENVIRON_RC}"; then
-    echo "" > .projrc
-    echo "# 引入 git 配置项" >> .projrc
-    echo ". .gitrc" >> .projrc
-    echo "" >> .projrc
-    cat "${ENVIRON_RC}" >> .projrc
-else
-    cat "${ENVIRON_RC}" > .projrc
-fi
-###### .projrc ######
-. scripts/flush.sh
-
-
 # 【通用】模板及资源
 echo "##### update / clone resources & templates ..."
 if [ ! -d /cnicg/resources.git ]; then
@@ -98,6 +82,15 @@ if [ ! -d /cnicg/resources.git ]; then
 else
     echo $(cd /cnicg/resources.git; git pull) 
 fi
+
+
+# 应用项目配置
+source "${ENVIRON_RC}"
+###### .projrc ######
+cat "${ENVIRON_RC}" > .projrc
+! command grep -qc '. .gitrc' .projrc && echo "append .gitrc" && sed -i -e 1c". .gitrc # 引入 git 配置项" .projrc
+###### .projrc ######
+. scripts/flush.sh
 
 
 echo "##### update & reload supervisor ..."

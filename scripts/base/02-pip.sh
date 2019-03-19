@@ -8,4 +8,4 @@ echo "${PROJ_PIP}"
 echo "${PROJ_PYTHON}"
 
 # 第三方依赖
-${PROJ_PIP} install -r scripts/base/requirements.txt
+${PROJ_PIP} install -q -r scripts/base/requirements.txt
