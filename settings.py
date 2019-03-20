@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,6 +65,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                # 'django.template.context_processors.static',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -176,6 +178,63 @@ RAVEN_CONFIG = {
     'dsn': '',
     'release': VERSION,
 }
+
+
+# http://docs.celeryproject.org/en/latest/django/
+# https://github.com/celery/celery/blob/master/examples/django/proj/settings.py
+
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost/%2fna_stats'
+CELERY_RESULT_BACKEND = 'db+sqlite:///.data/celery.sqlite'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+CELERY_BEAT_CONFIG = ''
+
+
+# https://github.com/OttoYiu/django-cors-headers
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+]
+CORS_ORIGIN_REGEX_WHITELIST = [
+    '^(https?://)?(.+)\.cniotroot\.cn(\:\d+)?$',
+]
+CORS_ALLOW_CREDENTIALS = True
+
+
+# https://www.django-rest-framework.org/api-guide/settings/
+
+REST_FRAMEWORK = {
+    'DEFAULT_VERSION': '1.0',
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    # 'UNAUTHENTICATED_USER': 'XXX.models.Anonymous',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ),
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    'DATETIME_INPUT_FORMATS': ('iso-8601', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S'),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'EXCEPTION_HANDLER': 'applus.rest_framework.views.exception_handler',
+    ################
+    # 插件扩展设置 #
+    ################
+}
+
 
 # 简单合并（覆盖）
 try:

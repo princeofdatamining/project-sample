@@ -18,4 +18,5 @@ from django.urls import path, include
 urlpatterns = [
     path('views/auth/', include('rest_framework.urls')),
     path('views/', include('libtest.urls')),
+    path('rest/', include('libtest.exceptions.urls')),
 ]
