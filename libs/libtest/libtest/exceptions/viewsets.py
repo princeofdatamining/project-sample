@@ -208,59 +208,53 @@ class ThrottledViewSet(viewsets.ViewSet):
 
 """
 [
-    [
-        {
-            "field": "non_field_errors",
-            "code": "null",
-            "message": "No data provided"
-        }
-    ]
+    {
+        "field": null,
+        "code": "null",
+        "message": "No data provided"
+    }
 ]
 """
-@router.register_decorator("users/null", base_name="rest-user-null")
+@router.register_decorator("error/null", base_name="rest-err-null")
 class NullUserViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
-        serializer = serializers.UserSerializer(data=None)
+        serializer = serializers.ErrorUserSerializer(data=None)
         serializer.is_valid(raise_exception=True)
         return response.Response(serializer.data)
 
 """
 [
-    [
-        {
-            "field": "non_field_errors",
-            "code": "invalid",
-            "message": "无效数据。期待为字典类型，得到的是 int 。"
-        }
-    ]
+    {
+        "field": null,
+        "code": "invalid",
+        "message": "无效数据。期待为字典类型，得到的是 int 。"
+    }
 ]
 """
-@router.register_decorator("users/mapping", base_name="rest-user-mapping")
+@router.register_decorator("error/mapping", base_name="rest-err-mapping")
 class MappingUserViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
-        serializer = serializers.UserSerializer(data=123)
+        serializer = serializers.ErrorUserSerializer(data=123)
         serializer.is_valid(raise_exception=True)
         return response.Response(serializer.data)
 
 """
 [
-    [
-        {
-            "field": "non_field_errors",
-            "code": "run_bar",
-            "message": "run_validators:bar"
-        },
-        {
-            "field": "non_field_errors",
-            "code": "run_foo",
-            "message": "run_validators:foo"
-        }
-    ]
+    {
+        "field": null,
+        "code": "run_bar",
+        "message": "run_validators:bar"
+    },
+    {
+        "field": null,
+        "code": "run_foo",
+        "message": "run_validators:foo"
+    }
 ]
 """
-@router.register_decorator("users/validators", base_name="rest-user-validators")
+@router.register_decorator("error/validators", base_name="rest-err-validators")
 class ValidatorsUserViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
@@ -270,16 +264,14 @@ class ValidatorsUserViewSet(viewsets.ViewSet):
 
 """
 [
-    [
-        {
-            "field": "non_field_errors",
-            "code": "validate",
-            "message": "validate_failed"
-        }
-    ]
+    {
+        "field": null,
+        "code": "validate",
+        "message": "validate_failed"
+    }
 ]
 """
-@router.register_decorator("users/validate", base_name="rest-user-validate")
+@router.register_decorator("error/validate", base_name="rest-err-validate")
 class ValidateUserViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
@@ -289,33 +281,29 @@ class ValidateUserViewSet(viewsets.ViewSet):
 
 """
 [
-    [
-        {
-            "field": "username",
-            "code": "fail_username_1",
-            "message": "fields(username): case-1"
-        },
-        {
-            "field": "username",
-            "code": "fail_username_2",
-            "message": "fields(username): case-2"
-        }
-    ],
-    [
-        {
-            "field": "password",
-            "code": "fail_password_a",
-            "message": "fields(password): case-a"
-        },
-        {
-            "field": "password",
-            "code": "fail_password_b",
-            "message": "fields(password): case-b"
-        }
-    ]
+    {
+        "field": "username",
+        "code": "fail_username_1",
+        "message": "fields(username): case-1"
+    },
+    {
+        "field": "username",
+        "code": "fail_username_2",
+        "message": "fields(username): case-2"
+    },
+    {
+        "field": "password",
+        "code": "fail_password_a",
+        "message": "fields(password): case-a"
+    },
+    {
+        "field": "password",
+        "code": "fail_password_b",
+        "message": "fields(password): case-b"
+    }
 ]
 """
-@router.register_decorator("users/fields", base_name="rest-user-fields")
+@router.register_decorator("error/fields", base_name="rest-err-fields")
 class FieldsUserViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):

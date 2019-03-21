@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=missing-docstring,too-few-public-methods,unused-argument
-from rest_framework import serializers
-from applus.django import dao
+from ..serializers import BaseUserSerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ErrorUserSerializer(BaseUserSerializer):
 
     default_error_messages = {
         "fail_username_1": "fields(username): case-1",
@@ -16,12 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
         "validate": "validate_failed",
     }
 
-    class Meta:
-        model = dao.get_lazy_model(None)
-        fields = ['username', 'password']
 
-
-class ValidatorsUserSerializer(UserSerializer):
+class ValidatorsUserSerializer(ErrorUserSerializer):
 
     def run_validators(self, value):
         self.validators = [
@@ -37,13 +32,13 @@ class ValidatorsUserSerializer(UserSerializer):
         self.fail("run_foo")
 
 
-class ValidateUserSerializer(UserSerializer):
+class ValidateUserSerializer(ErrorUserSerializer):
 
     def validate(self, attrs):
         return self.fail("validate")
 
 
-class FieldsUserSerializer(UserSerializer):
+class FieldsUserSerializer(ErrorUserSerializer):
 
     def __init__(self, *args, **kwargs):
         super(FieldsUserSerializer, self).__init__(*args, **kwargs)

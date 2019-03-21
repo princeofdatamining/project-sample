@@ -19,4 +19,5 @@ urlpatterns = [
     path('views/auth/', include('rest_framework.urls')),
     path('views/', include('libtest.urls')),
     path('rest/', include('libtest.exceptions.urls')),
+    path('rest/', include('libtest.biz.urls')),
 ]
