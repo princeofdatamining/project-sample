@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'materialapp',
     # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'applus',
+    'drf_auth',
+    #
+    'libtest',
     'projapp',
 ]
 
@@ -240,10 +245,7 @@ REST_FRAMEWORK = {
 
 
 # 简单合并（覆盖）
-try:
-    from environ.default import *
-except ModuleNotFoundError:
-    pass
+from environ.default import *
 
 # 高级合并（使用 python 进行处理）
 try:

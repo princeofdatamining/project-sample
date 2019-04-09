@@ -3,7 +3,7 @@
 virtualenv = $(realpath ${PROJ_PYTHON_BIN}/..)
 # pythonpath = ${PROJ_PYTHON}
 chdir = ${PROJ_GIT_DIR}
-wsgi-file = proj/wsgi.py
+wsgi-file = wsgi.py
 socket = :${PROJ_WEB_PORT}
 ; spawn the master & processes
 master = true

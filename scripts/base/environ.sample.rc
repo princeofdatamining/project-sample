@@ -2,54 +2,64 @@
 # 产品/项目名称
 
 # 小组代号
-GROUP_CODENAME=test
+GROUP_CODENAME="${GROUP_CODENAME:-test}"
 # 项目代号
-PROJ_CODENAME=sample
+PROJ_CODENAME="${PROJ_CODENAME:-sample}"
 
 # 如果需要 pyenv 则需要设置：python 版本、虚拟环境名、pyenv 虚拟环境目录；
 # 否则可跳过
-PROJ_PYTHON_VER=3.6.6
-PROJ_PYTHON_ENV=${GROUP_CODENAME}_${PROJ_CODENAME}
-PROJ_PYTHON_BIN="/cnicg/app/pyenv/versions/${PROJ_PYTHON_ENV}/bin"
+PROJ_PYTHON_VER="${PROJ_PYTHON_VER:-3.6.6}"
+PROJ_PYTHON_ENV="${PROJ_PYTHON_ENV:-${GROUP_CODENAME}_${PROJ_CODENAME}}"
+PROJ_PYTHON_BIN="${PROJ_PYTHON_BIN:-/cnicg/app/pyenv/versions/${PROJ_PYTHON_ENV}/bin}"
 
 # 如果不使用 pyenv，则需要设置对应的 python、pip 路径；
 # 否则可跳过
-PROJ_PYTHON="${PROJ_PYTHON_BIN}/python3"
-PROJ_PIP="${PROJ_PYTHON_BIN}/pip3"
+PROJ_PYTHON="${PROJ_PYTHON:-${PROJ_PYTHON_BIN}/python3}"
+PROJ_PIP="${PROJ_PIP:-${PROJ_PYTHON_BIN}/pip3}"
 
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-SECRET_KEY="00000111112222233333444445555566666777778888899999"
+SECRET_KEY="${SECRET_KEY:-00000111112222233333444445555566666777778888899999}"
 
 # 静态资源 URL 及目录
-STATIC_URL=/dj/static/
-STATIC_ROOT="/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/web"
+STATIC_URL="${STATIC_URL:-/dj/static/}"
+STATIC_ROOT="${STATIC_ROOT:-/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/web}"
 
 # 动态资源 URL 及目录
-# MEDIA_URL=/media/
-# MEDIA_ROOT="/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/media"
+MEDIA_URL="${MEDIA_URL:-/media/}"
+MEDIA_ROOT="${MEDIA_ROOT:-/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/media}"
 
 # 日志
-PROJ_LOG_DIR="/cnicg/logs/${GROUP_CODENAME}/${PROJ_CODENAME}"
-PROG_LOG_FILE="${PROJ_LOG_DIR}/root.log"
+PROJ_LOG_DIR="${PROJ_LOG_DIR:-/cnicg/logs/${GROUP_CODENAME}/${PROJ_CODENAME}}"
+PROG_LOG_FILE="${PROG_LOG_FILE:-${PROJ_LOG_DIR}/root.log}"
 
 # raven(sentry)
-RAVEN_DSN=""
+RAVEN_DSN="${RAVEN_DSN:-}"
 
 # 容器运行端口
-PROJ_WEB_PORT=8000
+PROJ_WEB_PORT="${PROJ_WEB_PORT:-8000}"
 # 前端代码目录
-PUB_WWW_ROOT="${PROJ_GIT_DIR}/www/default/dist"
+PUB_WWW_ROOT="${PUB_WWW_ROOT:-${PROJ_GIT_DIR}/www/default/dist}"
 # 域名
-PROJ_DOMAIN="${PROJ_CODENAME}.${GROUP_CODENAME}.work.com"
+PROJ_DOMAIN="${PROJ_DOMAIN:-${PROJ_CODENAME}.${GROUP_CODENAME}.work.com}"
 
 # 前端通过 node/nuxt 启动服务
-# NUXT_WEB_PORT=8001
-# NUXT_WEB_PATH="${PROJ_GIT_DIR}/www/nuxt"
-# NUXT_NODE_BIN="/cnicg/app/nvm/versions/node/v10.15.3/bin/node"
+# NUXT_WEB_PORT="${NUXT_WEB_PORT:-8001}"
+# NUXT_WEB_PATH="${NUXT_WEB_PATH:-${PROJ_GIT_DIR}/www/nuxt}"
+# NUXT_NODE_BIN="${NUXT_NODE_BIN:-/cnicg/app/nvm/versions/node/v10.15.3/bin/node}"
 
 # 数据库连接配置
-DB_URI="" # "mysql://127.0.0.1/db_${GROUP_CODENAME}_${PROJ_CODENAME}?charset=utf8"
+DB_URI="${DB_URI:-}" # "mysql://127.0.0.1/db_${GROUP_CODENAME}_${PROJ_CODENAME}?charset=utf8"
 
 # celery
-# CELERY_BROKER_URL="amqp://127.0.0.1/%2f${GROUP_CODENAME}_${PROJ_CODENAME}"
-# CELERY_LOG_FILE="${PROJ_LOG_DIR}/celery.log"
+# CELERY_BROKER_URL="${CELERY_BROKER_URL:-amqp://127.0.0.1/%2f${GROUP_CODENAME}_${PROJ_CODENAME}}"
+# CELERY_LOG_FILE="${CELERY_LOG_FILE:-${PROJ_LOG_DIR}/celery.log}"
+# CELERY_BEAT_CONFIG="${CELERY_BEAT_CONFIG:-${PROJ_GIT_DIR}/scripts/host/celery_beat.yml}"
+
+##############
+# for gauge  #
+##############
+
+GAUGE_ENV="${GAUGE_ENV:-ci}"
+G_ENDPOINT="${G_ENDPOINT:-http://localhost:${PROJ_WEB_PORT}}"
+G_SUPER="${G_SUPER:-SUPER_USERNAME SUPER_PASSWORD}"
+G_DEFAULT_PASSWORD="${G_DEFAULT_PASSWORD:-DEFAULT_PASSWORD}"

@@ -53,7 +53,7 @@ class AuthViewSet(viewsets.ViewSet):
         "authtoken.token",
         "applus.rest_framework.authtoken.AuthTokenManager")
 
-    @router.verb("POST")
+    @router.verb("POST", url_path="", url_name="")
     def login(self, request, *args, **kwargs):
         """ 登入 """
         serializer = serializers.LoginUserSerializer(data=request.data)
@@ -64,7 +64,7 @@ class AuthViewSet(viewsets.ViewSet):
         resp.status_code = status.HTTP_201_CREATED
         return resp
 
-    @router.verb("delete")
+    @router.verb("delete", url_path="", url_name="")
     def logout(self, request, *args, **kwargs):
         """ 登出 """
         if request.user:
@@ -74,7 +74,7 @@ class AuthViewSet(viewsets.ViewSet):
     @router.verb()
     def profile(self, request, *args, **kwargs):
         """ 帐号 """
-        if not request.user:
+        if not request.user.id:
             return response.Response({})
         serializer = serializers.ProfileUserSerializer(instance=request.user)
         return response.Response(serializer.data)
@@ -82,7 +82,7 @@ class AuthViewSet(viewsets.ViewSet):
     @router.verb()
     def token(self, request, *args, **kwargs):
         """ 令牌 """
-        if not request.user:
+        if not request.user.id:
             return response.Response({})
         instance = self.token_dao.fetch(user_id=request.user.id)
         serializer = serializers.TokenSerializer(instance=instance)

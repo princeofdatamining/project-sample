@@ -1,6 +1,11 @@
 .*
 *.pyc
-*.sqlite*
 *.egg-info/
+*.sqlite*
+*.pid
 __pycache__/
 /environ/
+/scripts/host/uwsgi.ini
+/scripts/host/supervisor.conf
+/scripts/host/nginx.conf
+/scripts/host/celery_beat.yml

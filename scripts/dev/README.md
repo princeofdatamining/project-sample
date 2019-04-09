@@ -29,9 +29,9 @@ fi
 ## 安装依赖
 
 ```shell
-./scripts/dev/02-pip.sh
+./scripts/base/01-submodules.sh
 ./scripts/base/02-pip.sh
-./scripts/dev/40-submodules.sh
+./scripts/dev/02-pip.sh
 ```
 
 ## 初始化项目配置及数据
@@ -74,6 +74,12 @@ fi
 
 ```shell
 ./scripts/dev/manage.sh collectstatic --noinput
+```
+
+## 业务测试(发布前必须通过)
+
+```shell
+./scripts/gauges/40-gauge.sh
 ```
 
 ## 运行服务

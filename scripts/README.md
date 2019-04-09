@@ -40,6 +40,7 @@
 
   | 脚本                | 说明                           |
   | ------------------- | ------------------------------ |
+  | `01-submodules.sh`  | 以 `python setup.py --develop` 方式注册子模块依赖 |
   | `02-pip.sh`         | 安装业务功能所需依赖           |
   | `03-environ.sh`     | 生成项目环境配置               |
   | `10-prepare.sh`     | 预处理数据                     |
@@ -64,7 +65,6 @@
   | `40-makemigrations.sh` | 数据库变更(提交 PR 前必须重新合并)                |
   | `40-pylint.sh`         | 语法检查（提交前检查）                            |
   | `40-requirements.sh`   | 合并业务、运行所需依赖（可选，提交前检查）        |
-  | `40-submodules.sh`     | 以 `python setup.py --develop` 方式注册子模块依赖 |
   | `40-tests.sh`          | 单元测试（提交前处理）                            |
   | `env.sh`               | `pyenv` 环境下，无需激活(activate)相关环境        |
   | `manage.sh`            | `pyenv` 环境下，无需激活(activate)相关环境        |

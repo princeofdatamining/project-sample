@@ -40,6 +40,10 @@ class ValidateUserSerializer(ErrorUserSerializer):
 
 class FieldsUserSerializer(ErrorUserSerializer):
 
+    # pylint: disable=missing-docstring
+    class Meta(ErrorUserSerializer.Meta):
+        fields = ['username', 'password']
+
     def __init__(self, *args, **kwargs):
         super(FieldsUserSerializer, self).__init__(*args, **kwargs)
         self.fields['username'].validators.append(self.fail_username_1)

@@ -26,7 +26,7 @@ class OkViewSet(viewsets.ViewSet):
         return response.Response({"reason": "Welcome"})
 
 """
-[
+400, [
     {
         "field": null,
         "code": "parse_error",
@@ -41,7 +41,7 @@ class ParseErrorViewSet(viewsets.ViewSet):
         raise exceptions.ParseError()
 
 """
-[
+401, [
     {
         "field": null,
         "code": "not_authenticated",
@@ -49,7 +49,7 @@ class ParseErrorViewSet(viewsets.ViewSet):
     }
 ]
 
-{
+200, {
     "message": "Authenticated"
 }
 """
@@ -61,7 +61,7 @@ class NotAuthenticatedViewSet(viewsets.ViewSet):
         return response.Response({"message": "Authenticated"})
 
 """
-[
+403, [
     {
         "field": null,
         "code": "permission_denied",
@@ -69,7 +69,7 @@ class NotAuthenticatedViewSet(viewsets.ViewSet):
     }
 ]
 
-[
+401, [
     {
         "field": null,
         "code": "not_authenticated",
@@ -85,7 +85,7 @@ class AuthenticationFailedViewSet(viewsets.ViewSet):
         return response.Response({"message": "Something's wrong if you can see this message."})
 
 """
-[
+403, [
     {
         "field": null,
         "code": "permission_denied",
@@ -100,7 +100,7 @@ class DjangoPermissionDeniedViewSet(viewsets.ViewSet):
         raise PermissionDenied
 
 """
-[
+403, [
     {
         "field": null,
         "code": "permission_denied",
@@ -115,7 +115,7 @@ class PermissionDeniedViewSet(viewsets.ViewSet):
         raise exceptions.PermissionDenied()
 
 """
-[
+404, [
     {
         "field": null,
         "code": "not_found",
@@ -130,7 +130,7 @@ class DjangoNotFoundViewSet(viewsets.ViewSet):
         raise Http404
 
 """
-[
+404, [
     {
         "field": null,
         "code": "not_found",
@@ -145,7 +145,7 @@ class NotFoundViewSet(viewsets.ViewSet):
         raise exceptions.NotFound()
 
 """
-[
+405, [
     {
         "field": null,
         "code": "method_not_allowed",
@@ -160,7 +160,7 @@ class NotAllowedViewSet(viewsets.ViewSet):
         return response.Response({"message": "nop"})
 
 """
-[
+406, [
     {
         "field": null,
         "code": "not_acceptable",
@@ -175,7 +175,7 @@ class NotAcceptableViewSet(viewsets.ViewSet):
         raise exceptions.NotAcceptable()
 
 """
-[
+415, [
     {
         "field": null,
         "code": "unsupported_media_type",
@@ -190,7 +190,7 @@ class UnsupportedMediaTypeViewSet(viewsets.ViewSet):
         raise exceptions.UnsupportedMediaType("application/unknown")
 
 """
-[
+429, [
     {
         "field": null,
         "code": "throttled",
@@ -207,7 +207,7 @@ class ThrottledViewSet(viewsets.ViewSet):
 ################################################################################
 
 """
-[
+400, [
     {
         "field": null,
         "code": "null",
@@ -224,7 +224,7 @@ class NullUserViewSet(viewsets.ViewSet):
         return response.Response(serializer.data)
 
 """
-[
+400, [
     {
         "field": null,
         "code": "invalid",
@@ -241,7 +241,7 @@ class MappingUserViewSet(viewsets.ViewSet):
         return response.Response(serializer.data)
 
 """
-[
+400, [
     {
         "field": null,
         "code": "run_bar",
@@ -263,7 +263,7 @@ class ValidatorsUserViewSet(viewsets.ViewSet):
         return response.Response(serializer.data)
 
 """
-[
+400, [
     {
         "field": null,
         "code": "validate",
@@ -280,7 +280,7 @@ class ValidateUserViewSet(viewsets.ViewSet):
         return response.Response(serializer.data)
 
 """
-[
+400, [
     {
         "field": "username",
         "code": "fail_username_1",

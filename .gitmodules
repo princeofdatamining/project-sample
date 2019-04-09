@@ -1,3 +1,6 @@
 [submodule "libs/applus"]
 	path = libs/applus
 	url = git@github.com:/princeofdatamining/python-applus.git
+[submodule "libs/drf_auth"]
+	path = libs/drf_auth
+	url = git@github.com:princeofdatamining/django-restframework-auth.git

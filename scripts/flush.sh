@@ -8,9 +8,9 @@ echo "##### check python / pyenv ..."
 # 安装依赖
 [[ $@ =~ "--no-pip" ]] && exit 0
 echo "##### check libraries ..."
-. scripts/host/02-pip.sh
+. scripts/base/01-submodules.sh
 . scripts/base/02-pip.sh
-. scripts/dev/40-submodules.sh
+. scripts/host/02-pip.sh
 [[ $@ =~ "--to-pip" ]] && exit 0
 
 # 更新项目配置
@@ -32,4 +32,6 @@ echo "##### update uwsgi & supervisor & nginx configuration"
 . scripts/host/19-supervisor.sh
 . scripts/host/19-nginx.sh
 # scripts/host/19-nuxt.sh
+# scripts/host/18-celerybeat.sh
 [[ $@ =~ "--to-servconf" ]] && exit 0
+echo "flush done."
