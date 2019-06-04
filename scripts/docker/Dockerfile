@@ -1,14 +1,9 @@
-FROM python
+FROM test-djample:python
 
 # 工作目录
 RUN mkdir -p /usr/src/proj
 WORKDIR /usr/src/proj
 COPY src ./
-
-# pip
-RUN mkdir ~/.pip
-RUN mv scripts/host/pip.aliyun.conf ~/.pip/pip.conf
-RUN if [ -f scripts/dev/requirements.txt ]; then pip3 install -q -r scripts/dev/requirements.txt; fi
 
 # 初始化环境
 RUN cp scripts/base/environ.sample.rc .projrc

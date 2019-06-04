@@ -4,6 +4,12 @@
 # 设定工作目录
 cd ${PROJ_GIT_DIR}
 
+# 动态资源
+mkdir -p ${MEDIA_ROOT}
+
+# 数据库变更
+[[ $@ =~ "--migrate" ]] && ${PROJ_PYTHON} manage.py migrate
+
 # 通过 command 处理业务数据
 # ${PROJ_PYTHON} manage.py COMMAND ...
 # ...

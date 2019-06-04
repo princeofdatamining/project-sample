@@ -5,6 +5,11 @@
 *.pid
 __pycache__/
 /environ/
+/scripts/gauges/logs/
+/scripts/gauges/reports/
+/scripts/gauges/env/
+/scripts/gauges/utils/default.py
+/scripts/gauges/utils/settings.py
 /scripts/host/uwsgi.ini
 /scripts/host/supervisor.conf
 /scripts/host/nginx.conf

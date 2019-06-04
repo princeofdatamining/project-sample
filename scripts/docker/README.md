@@ -1,18 +1,15 @@
 # Docker
 
-## 运行
+## 制作镜像
+
+为了减少 `pip install` 和 `npm i` 的用时，依赖变更时才制作 `IMAGE:python` 镜像：
 
 ```shell
-# 运行服务
-docker-compose up -d
+scripts/docker/build.sh . [--skip-rm] [--skip-resources] --python [--skip-image]
+```
 
-# 创建数据库
-docker-compose exec mysql bash -c 'echo "create database db_test_sample default charset utf8;" | mysql -pexample'
-docker-compose exec web python3 manage.py migrate
-docker-compose exec web bash ./scripts/base/10-prepare.sh
+然后制作 `IMAGE:latest`(或 `IMAGE:gauge`) 镜像：
 
-# 创建超级用户 super:super
-docker-compose exec web python3 manage.py createsuperuser --noinput --username=super --email=super@localhost 
-docker-compose exec mysql bash -c 'echo "update db_test_sample.auth_user set password = \"pbkdf2_sha256\$150000\$salt\$WWxoCDzUc76vDtQ/VzyCpYfxhrAuwhTbYFsEIXDj5tU=\" where id = 1;" | mysql -pexample'
-
+```
+scripts/docker/build.sh . [--skip-rm] [--skip-resources] [--gauge]
 ```

@@ -1,0 +1,4 @@
+# 登录 <username> 并获取令牌
+
+* 使用密码登录 <username>
+* 获取 <username> 的令牌

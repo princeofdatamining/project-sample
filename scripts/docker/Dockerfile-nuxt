@@ -1,0 +1,11 @@
+FROM test-djample:node
+
+RUN mkdir -p /usr/src/www
+WORKDIR /usr/src/www
+COPY src/www/is ./
+
+RUN PORT=8000 npm run build
+
+EXPOSE 8000
+
+CMD [ "node", "node_modules/.bin/nuxt", "start", "--hostname", "0.0.0.0" ]

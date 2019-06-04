@@ -9,6 +9,6 @@ for package in `ls libs`; do
     dir="libs/$package"
     if [ -d "$dir" ]; then
         echo "$dir"
-        echo $(cd "$dir"; ${PROJ_PYTHON} setup.py -q develop)
+        echo $(cd "$dir"; ${PROJ_PYTHON} setup.py -q develop $*)
     fi
 done

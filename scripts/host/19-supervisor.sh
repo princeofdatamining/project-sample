@@ -1,6 +1,6 @@
 . .projrc && cat <<EOF > scripts/host/supervisor.conf
 ;[group:${PROJ_CODENAME}]
-;programs = ${PROJ_CODENAME}, ${PROJ_CODENAME}_work, ${PROJ_CODENAME}_beat
+;programs = ${PROJ_CODENAME}, ${PROJ_CODENAME}_work, ${PROJ_CODENAME}_beat, ${PROJ_CODENAME}_nuxt
 
 [program:${PROJ_CODENAME}]
 command = ${PROJ_PYTHON_BIN}/uwsgi --ini ${PROJ_GIT_DIR}/scripts/host/uwsgi.ini

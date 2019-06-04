@@ -8,7 +8,7 @@ cd ${PROJ_GIT_DIR}
 . scripts/base/environ.py.sh
 
 # 日志目录
-mkdir -p ${PROJ_LOG_DIR} .data/media
+mkdir -p ${PROJ_LOG_DIR}
 
 # 动态目录
 # mkdir -p ${MEDIA_ROOT}

@@ -1,6 +1,6 @@
 . .projrc && echo "# -*- coding: utf-8 -*-" > environ/default.py && cat <<EOF >> environ/default.py
 #import pymysql; pymysql.install_as_MySQLdb()
-from applus.environ import get_envfunc, update_django_db
+from applus.environ import get_envfunc, update_django_dbs
 
 
 read_env = get_envfunc("")
@@ -36,7 +36,7 @@ MEDIA_ROOT = read_env("MEDIA_ROOT", "${MEDIA_ROOT}")
 
 def merge(g):
     # 数据库设置
-    update_django_db(g['DATABASES'], 'default', read_env("DB_URI", "${DB_URI}"), **default_db_values)
+    update_django_dbs(g['DATABASES'], read_env("DB_URI", "${DB_URI}"), **default_db_values)
     # 日志
     g['LOGGING']['handlers']['file']['filename'] = read_env("PROG_LOG_FILE", "${PROG_LOG_FILE}")
     # g['LOGGING']['handlers']['celery']['filename'] = read_env("CELERY_LOG_FILE", "${CELERY_LOG_FILE}")

@@ -4,7 +4,7 @@
 # 小组代号
 GROUP_CODENAME="${GROUP_CODENAME:-test}"
 # 项目代号
-PROJ_CODENAME="${PROJ_CODENAME:-sample}"
+PROJ_CODENAME="${PROJ_CODENAME:-djample}"
 
 # 如果需要 pyenv 则需要设置：python 版本、虚拟环境名、pyenv 虚拟环境目录；
 # 否则可跳过
@@ -26,7 +26,7 @@ STATIC_ROOT="${STATIC_ROOT:-/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/web}
 
 # 动态资源 URL 及目录
 MEDIA_URL="${MEDIA_URL:-/media/}"
-MEDIA_ROOT="${MEDIA_ROOT:-/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/media}"
+MEDIA_ROOT="${MEDIA_ROOT:-/cnicg/media/${GROUP_CODENAME}/${PROJ_CODENAME}}"
 
 # 日志
 PROJ_LOG_DIR="${PROJ_LOG_DIR:-/cnicg/logs/${GROUP_CODENAME}/${PROJ_CODENAME}}"
@@ -37,10 +37,11 @@ RAVEN_DSN="${RAVEN_DSN:-}"
 
 # 容器运行端口
 PROJ_WEB_PORT="${PROJ_WEB_PORT:-8000}"
-# 前端代码目录
-PUB_WWW_ROOT="${PUB_WWW_ROOT:-${PROJ_GIT_DIR}/www/default/dist}"
 # 域名
 PROJ_DOMAIN="${PROJ_DOMAIN:-${PROJ_CODENAME}.${GROUP_CODENAME}.work.com}"
+# 前端代码目录
+PUB_WWW_ROOT="${PUB_WWW_ROOT:-${PROJ_GIT_DIR}/www/default/dist}"
+ADMIN_WWW_ROOT="${ADMIN_WWW_ROOT:-${PROJ_GIT_DIR}/www/admin/dist}"
 
 # 前端通过 node/nuxt 启动服务
 # NUXT_WEB_PORT="${NUXT_WEB_PORT:-8001}"
@@ -48,7 +49,7 @@ PROJ_DOMAIN="${PROJ_DOMAIN:-${PROJ_CODENAME}.${GROUP_CODENAME}.work.com}"
 # NUXT_NODE_BIN="${NUXT_NODE_BIN:-/cnicg/app/nvm/versions/node/v10.15.3/bin/node}"
 
 # 数据库连接配置
-DB_URI="${DB_URI:-}" # "mysql://127.0.0.1/db_${GROUP_CODENAME}_${PROJ_CODENAME}?charset=utf8"
+DB_URI="${DB_URI:-mysql://127.0.0.1:3306/db_${GROUP_CODENAME}_${PROJ_CODENAME}?charset=utf8}"
 
 # celery
 # CELERY_BROKER_URL="${CELERY_BROKER_URL:-amqp://127.0.0.1/%2f${GROUP_CODENAME}_${PROJ_CODENAME}}"
