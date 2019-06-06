@@ -1,5 +1,5 @@
 IMAGE_NAME=${IMAGE_NAME:-test-djample} # 资源文件名前缀
-VERSION="$1" # 允许指定版本
+VERSION=""; if [[ ! $1 == -* ]]; then VERSION="$1"; shift; fi; # 允许指定版本
 PROJ_NAME="${PROJ_NAME:-${IMAGE_NAME}}"
 RC=/cnicg/projs/${IMAGE_NAME}.rc # 必须准备好配置文件
 GROUP_NAME=djample # supervisor 组名
@@ -30,8 +30,9 @@ cd /cnicg/projs/${PROJ_NAME}
 cp ${RC} .projrc
 
 # 更新配置、服务
-bash scripts/flush.sh
+bash scripts/flush.sh $@
 [ ! -f /cnicg/conf/supervisor/conf.d/${PROJ_NAME}.conf ] && ln -s $(pwd)/scripts/host/supervisor.conf /cnicg/conf/supervisor/conf.d/${PROJ_NAME}.conf
 [ ! -f /cnicg/conf/nginx/conf.d/${PROJ_NAME}.conf ] && ln -s $(pwd)/scripts/host/nginx.conf /cnicg/conf/nginx/conf.d/${PROJ_NAME}.conf
 sudo supervisorctl update && sudo supervisorctl restart ${GROUP_NAME}:*
-sudo nginx -t && sudo nginx -s reload
+command -v nginx >/dev/null && sudo nginx -t && sudo nginx -s reload
+echo "Done."

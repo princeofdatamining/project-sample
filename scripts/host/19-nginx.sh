@@ -21,15 +21,15 @@ server {
     include /cnicg/resources.git/nginx/gzip.conf;
   }
   #location /admin/ {
-  #  alias ${ADMIN_WWW_ROOT}/;
-  #  index index.html index.htm;
-  #  expires 5d;
-  #  include /cnicg/resources.git/nginx/gzip.conf;
+    #alias ${ADMIN_WWW_ROOT}/;
+    #index index.html index.htm;
+    #expires 5d;
+    #include /cnicg/resources.git/nginx/gzip.conf;
   #}
   location / {
-  #  root ${PUB_WWW_ROOT}/;
-  #  expires 5d;
-  #  include /cnicg/resources.git/nginx/gzip.conf;
+    #root ${PUB_WWW_ROOT}/;
+    #expires 5d;
+    #include /cnicg/resources.git/nginx/gzip.conf;
   #}
   #location ~ ^/(api|views|rest)/ {
     uwsgi_pass 127.0.0.1:${PROJ_WEB_PORT};

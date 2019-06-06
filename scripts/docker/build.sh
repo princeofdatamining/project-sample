@@ -1,7 +1,7 @@
 # 项目Git仓库
 PROJ_GIT_URL=git@github.com:princeofdatamining/project-sample.git
 # 项目Git版本分支
-PROJ_GIT_BRANCH=gauge
+PROJ_GIT_BRANCH=${BRANCH_NAME:-master}
 PROJ_VERSION=latest; if [[ $@ =~ "--gauge" ]]; then PROJ_VERSION="gauge"; fi;
 # 打包文件
 IMAGE_NAME=${IMAGE_NAME:-test-djample}
@@ -37,7 +37,7 @@ sed -i "s/PROJ_LOG_DIR=.*/PROJ_LOG_DIR=\${PROJ_GIT_DIR}\/log/" scripts/base/envi
 sed -i "s/^virtualenv/# virtualenv/" scripts/host/19-uwsgi.sh
 sed -i "s/^# pythonpath/pythonpath/" scripts/host/19-uwsgi.sh
 
-[ ! "$1" == "." ] && cd ..; sed -i "s/.*10-prepare.*/# scripts\/base\/10-prepare.sh/" ${PROJ_NAME}/scripts/flush.sh
+[ ! "$1" == "." ] && cd ..
 [[ $@ =~ "--python" ]] && [ -f ${PROJ_NAME}/scripts/docker/Dockerfile-python ] && (\
     cp ${PROJ_NAME}/scripts/docker/Dockerfile-python Dockerfile; sed -i "s/^COPY src/COPY ${PROJ_NAME}/" Dockerfile;\
     docker build -t ${IMAGE_NAME}:python .)

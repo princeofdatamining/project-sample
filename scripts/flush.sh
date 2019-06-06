@@ -1,37 +1,46 @@
 . .projrc
 
+NOPYENV=; NOPIP=; DOUNINSTALL=; NOENVIRON=; NOCOLLECT=; NOPREPARE=; DOMIGRATE=; NOHOST=; NONUXT=;
+while true; do
+  case "$1" in
+    --no-pyenv ) NOPYENV=$1; echo NOPYENV=${NOPYENV}; shift ;;
+    --no-pip ) NOPIP=$1; echo NOPIP=${NOPIP}; shift ;;
+    --uninstall ) DOUNINSTALL=$1; echo DOUNINSTALL=${DOUNINSTALL}; shift ;;
+    --no-environ ) NOENVIRON=$1; echo NOENVIRON=${NOENVIRON}; shift ;;
+    --no-collect ) NOCOLLECT=$1; echo NOCOLLECT=${NOCOLLECT}; shift ;;
+    --no-prepare ) NOPREPARE=$1; echo NOPREPARE=${NOPREPARE}; shift ;;
+    --migrate ) DOMIGRATE=$1; echo DOMIGRATE=${DOMIGRATE}; shift ;;
+    --no-host ) NOHOST=$1; echo NOHOST=${NOHOST}; shift ;;
+    --no-nuxt ) NONUXT=$1; echo NONUXT=${NONUXT}; shift ;;
+    -- ) shift; echo "-- $@"; break ;;
+    * ) break ;;
+  esac
+done
+
 # 创建 pyenv 虚拟环境；如无需 pyenv，则注释
-echo "##### check python / pyenv ..."
-. scripts/host/02-pyenv.sh
-[[ $@ =~ "--to-pyenv" ]] && exit 0
-
+[ -z "${NOPYENV}" ] && echo "host: pyenv" && (
+$SHELL ./scripts/host/02-pyenv.sh;
+)
 # 安装依赖
-[[ $@ =~ "--no-pip" ]] && exit 0
-echo "##### check libraries ..."
-. scripts/base/01-submodules.sh
-. scripts/base/02-pip.sh
-. scripts/host/02-pip.sh
-[[ $@ =~ "--to-pip" ]] && exit 0
-
+[ -z "${NOPIP}" ] && echo "exec: pip" && (
+$SHELL ./scripts/base/01-submodules.sh ${DOUNINSTALL};
+$SHELL ./scripts/base/02-pip.sh;
+$SHELL ./scripts/host/02-pip.sh;
+)
 # 更新项目配置
-[[ $@ =~ "--no-environ" ]] && exit 0
-echo "##### update environ ..."
-. scripts/base/03-environ.sh
-[[ $@ =~ "--to-environ" ]] && exit 0
-
+[ -z "${NOENVIRON}" ] && echo "base: environ" && (
+$SHELL ./scripts/base/03-environ.sh ${NOCOLLECT};
+)
 # 更新数据
-[[ $@ =~ "--no-prepare" ]] && exit 0
-echo "##### prepare data ..."
-. scripts/base/10-prepare.sh
-[[ $@ =~ "--to-prepare" ]] && exit 0
-
+[ -z "${NOPREPARE}" ] && echo "base: prepare" && (
+$SHELL ./scripts/base/10-prepare.sh ${DOMIGRATE};
+)
 # 系统服务配置
-[[ $@ =~ "--no-servconf" ]] && exit 0
-echo "##### update uwsgi & supervisor & nginx configuration"
-. scripts/host/19-uwsgi.sh
-. scripts/host/19-supervisor.sh
-. scripts/host/19-nginx.sh
-# scripts/host/19-nuxt.sh
-# scripts/host/18-celerybeat.sh
-[[ $@ =~ "--to-servconf" ]] && exit 0
+[ -z "${NOHOST}" ] && echo "host: configuration" && (
+$SHELL ./scripts/host/19-uwsgi.sh;
+$SHELL ./scripts/host/19-supervisor.sh;
+$SHELL ./scripts/host/19-nginx.sh;#[ -z "${NONUXT}" ] && \
+#SHELL ./scripts/host/19-nuxt.sh;
+#SHELL ./scripts/host/18-celerybeat.sh;
+)
 echo "flush done."

@@ -7,7 +7,7 @@ COPY src ./
 
 # 初始化环境
 RUN cp scripts/base/environ.sample.rc .projrc
-RUN bash scripts/flush.sh
+RUN bash scripts/flush.sh --no-prepare --no-nuxt
 
 EXPOSE 8000
 

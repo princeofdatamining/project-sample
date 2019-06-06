@@ -14,4 +14,4 @@ mkdir -p ${PROJ_LOG_DIR}
 # mkdir -p ${MEDIA_ROOT}
 
 # 收集静态资源存至指定目录(部署时处理)
-${PROJ_PYTHON} manage.py collectstatic --noinput
+[[ ! $@ =~ "--no-collect" ]] && ${PROJ_PYTHON} manage.py collectstatic --noinput

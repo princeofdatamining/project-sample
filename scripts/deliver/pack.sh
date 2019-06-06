@@ -1,7 +1,7 @@
 # 项目Git仓库
 PROJ_GIT_URL=git@github.com:princeofdatamining/project-sample.git
 # 项目Git版本分支
-PROJ_GIT_BRANCH=${BRANCH_NAME:-jenkins}
+PROJ_GIT_BRANCH=${BRANCH_NAME:-build}
 PROJ_VERSION=${PROJ_GIT_BRANCH}-${BUILD_NUMBER:-`date +"%y%m%d%H%M"`}
 # 打包文件
 IMAGE_NAME=${IMAGE_NAME:-test-djample}
@@ -12,7 +12,7 @@ PROJ_NAME=${IMAGE_NAME}-${PROJ_VERSION}
 [ ! "$1" == "." ] && cd ${PROJ_NAME}
 [[ ! $@ =~ "--skip-rm" ]] && (rm -rf .git*;
 rm -rf scripts/deliver/pack* scripts/docker/build*;
-rm -rf scripts/{ci,dev,docker,gauges,live,allinone.sh};
+rm -rf scripts/{ci,dev,docker,gauges,live};
 rm -rf scripts/host/{00,01}-git*.sh Jenkinsfile Dockerfile)
 
 sed -i -e 1c"PROJ_GIT_DIR=/cnicg/projs/${IMAGE_NAME}" scripts/base/environ.sample.rc
@@ -42,11 +42,11 @@ if [ "$1" == "." ]; then
 else
     cd ..
 fi
-tar -czvf /cnicg/download/${PROJ_NAME}.tar.gz --exclude=*/scripts/ansible --exclude=*.git* ${PROJ_NAME}
+tar -czvf /cnicg/download/${PROJ_NAME}.tar.gz \
+  --exclude-vcs --exclude=*/scripts/deliver/pack* \
+  --exclude=*/scripts/ansible --exclude=*/scripts/ci --exclude=*/scripts/dev --exclude=*/scripts/docker --exclude=*/scripts/gauges --exclude=*/scripts/live \
+  --exclude=Jenkinsfile --exclude=Dockerfile \
+  ${PROJ_NAME}
 echo ${PROJ_NAME}
 cd -; rm -rf /tmp/${PROJ_NAME}
-#
-#
-#
-#
 #

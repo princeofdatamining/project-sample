@@ -8,5 +8,5 @@ cd ${NUXT_WEB_PATH}
 # cat <<EOF > ...
 
 echo "Updating node_modules ..."
-yarn install #npm i
+yarn install
 PORT=${NUXT_WEB_PORT} npm run build

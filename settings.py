@@ -178,7 +178,7 @@ LOGGING = {
 
 # https://docs.sentry.io/clients/python/integrations/django/
 
-VERSION = '1.0.1.190101'
+VERSION = '2.2.0.2'
 
 RAVEN_CONFIG = {
     'dsn': '',
