@@ -11,6 +11,15 @@ autorestart = true
 redirect_stderr = true
 stdout_logfile = ${PROJ_LOG_DIR}/supervisor.log
 
+[program:${PROJ_CODENAME}_grpc]
+command = ${PROJ_PYTHON} manage.py grpcserver --port ${PROJ_GRPC_PORT} --max_workers 4
+directory = ${PROJ_GIT_DIR}
+user = $(whoami)
+autostart = true
+autorestart = true
+redirect_stderr = true
+stdout_logfile = ${PROJ_LOG_DIR}/grpc.log
+
 ;[program:${PROJ_CODENAME}_work]
 ;command = ${PROJ_PYTHON_BIN}/celery worker -A crontab -l info
 ;directory = ${PROJ_GIT_DIR}
@@ -37,5 +46,5 @@ stdout_logfile = ${PROJ_LOG_DIR}/supervisor.log
 ;autorestart = true
 ;redirect_stderr = true
 ;stdout_logfile = ${PROJ_LOG_DIR}/nuxt.log
-;environment = PORT=${NUXT_WEB_PORT}
+;environment = HOST=0.0.0.0,PORT=${NUXT_WEB_PORT}
 EOF

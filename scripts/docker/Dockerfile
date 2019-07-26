@@ -1,9 +1,10 @@
-FROM test-djample:python
+FROM test-djample-python:b1
 
 # 工作目录
 RUN mkdir -p /usr/src/proj
 WORKDIR /usr/src/proj
 COPY src ./
+RUN rm -rf Dockerfile Jenkinsfile scripts/docker
 
 # 初始化环境
 RUN cp scripts/base/environ.sample.rc .projrc

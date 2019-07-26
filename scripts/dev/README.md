@@ -5,46 +5,19 @@
 ## 准备环境配置
 
 ```shell
-if [ ! -f .projrc ]; then
-  # 复制模板
-  cp scripts/base/environ.sample.rc .projrc
+# 复制模板
+[ ! -f .projrc ] && cp scripts/base/environ.sample.rc .projrc
 
-  # 指定当前目录为项目目录,也可手动设置（编辑第一行 PROJ_GIT_DIR=...）
-  sed -i -e 1c"PROJ_GIT_DIR=$(pwd)" .projrc
-fi
-```
+# 指定当前目录为项目目录,也可手动设置（编辑 PROJ_GIT_DIR=...）
+sed -i "s/PROJ_GIT_DIR=.*/PROJ_GIT_DIR=$(pwd)/" .projrc
 
-## 准备 `python` 环境
+vi .projrc
 
-- 创建新的 pyenv 虚拟环境
-
-  编辑 `.projrc` 中的 `PROJ_PYTHON_VER`、`PROJ_PYTHON_ENV`、`PROJ_PYTHON_BIN`，后调用：
-
-  > ./scripts/host/02-pyenv.sh
-
-- python 环境已就绪（无论是否虚拟）
-
-  编辑 `.projrc` 中的 `PROJ_PYTHON`、`PROJ_PIP`
-
-## 安装依赖
-
-```shell
-./scripts/base/01-submodules.sh
-./scripts/base/02-pip.sh
-./scripts/dev/02-pip.sh
-```
-
-## 初始化项目配置及数据
-
-自定义 `.projrc` 中其他配置，并执行：
-
-```shell
-./scripts/base/03-environ.sh
-./scripts/dev/manage.sh migrate
-./scripts/base/10-prepare.sh
+./scripts/flush.sh --no-collect --migrate --no-host
 ```
 
 如出现错误，修改 `.projrc` 中对应的键值，继续配置。
+
 
 ## 数据库变更(提交 PR 前必须重新合并)
 
@@ -73,7 +46,7 @@ fi
 ## 合并静态资源(如果项目需要，提交 PR 前必须执行)
 
 ```shell
-./scripts/dev/manage.sh collectstatic --noinput
+./scripts/flush.sh --no-host
 ```
 
 ## 业务测试(发布前必须通过)

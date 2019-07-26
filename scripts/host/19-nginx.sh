@@ -5,10 +5,10 @@ server {
   access_log ${PROJ_LOG_DIR}/access.log;
   error_log  ${PROJ_LOG_DIR}/error.log;
   #location ~ ^/(is|_nuxt)/ {
-  #  proxy_pass http://127.0.0.1:${NUXT_WEB_PORT};
-  #  proxy_set_header Host \$host;
-  #  proxy_set_header X-Real-IP \$remote_addr;
-  #  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    #proxy_pass http://127.0.0.1:${NUXT_WEB_PORT};
+    #proxy_set_header Host \$host;
+    #proxy_set_header X-Real-IP \$remote_addr;
+    #proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
   #}
   location ${STATIC_URL} {
     alias ${STATIC_ROOT}/;
@@ -39,4 +39,12 @@ server {
   include /cnicg/resources.git/nginx/robots.conf;
   include /cnicg/resources.git/nginx/ssl.conf;
 }
+#server {
+  #listen 8443 http2;
+  #server_name ${PROJ_DOMAIN};
+  #location / {
+    #grpc_pass 127.0.0.1:${PROJ_GRPC_PORT};
+  #}
+  #include /cnicg/resources.git/nginx/ssl_params;
+#}
 EOF

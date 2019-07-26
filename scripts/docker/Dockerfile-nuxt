@@ -1,4 +1,4 @@
-FROM test-djample:node
+FROM test-djample-node:b1
 
 RUN mkdir -p /usr/src/www
 WORKDIR /usr/src/www

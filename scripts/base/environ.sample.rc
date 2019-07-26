@@ -1,19 +1,12 @@
-
-# 产品/项目名称
-
-# 小组代号
-GROUP_CODENAME="${GROUP_CODENAME:-test}"
-# 项目代号
 PROJ_CODENAME="${PROJ_CODENAME:-djample}"
-
-# 如果需要 pyenv 则需要设置：python 版本、虚拟环境名、pyenv 虚拟环境目录；
-# 否则可跳过
+IMAGE_NAME="${IMAGE_NAME:-test-${PROJ_CODENAME}}"; _IMAGE_NAME_="`echo ${IMAGE_NAME} | sed s/-/_/`"
+PROJ_GIT_DIR=/cnicg/projs/${IMAGE_NAME}
+# 产品/项目名称
+# 如果需要 pyenv 则需要设置：python 版本、虚拟环境名、pyenv 虚拟环境目录；否则置空
 PROJ_PYTHON_VER="${PROJ_PYTHON_VER:-3.6.6}"
-PROJ_PYTHON_ENV="${PROJ_PYTHON_ENV:-${GROUP_CODENAME}_${PROJ_CODENAME}}"
+PROJ_PYTHON_ENV="${PROJ_PYTHON_ENV:-${IMAGE_NAME}}"
 PROJ_PYTHON_BIN="${PROJ_PYTHON_BIN:-/cnicg/app/pyenv/versions/${PROJ_PYTHON_ENV}/bin}"
-
-# 如果不使用 pyenv，则需要设置对应的 python、pip 路径；
-# 否则可跳过
+# 如果不使用 pyenv，则需要设置对应的 python、pip 路径；否则跳过
 PROJ_PYTHON="${PROJ_PYTHON:-${PROJ_PYTHON_BIN}/python3}"
 PROJ_PIP="${PROJ_PIP:-${PROJ_PYTHON_BIN}/pip3}"
 
@@ -22,14 +15,14 @@ SECRET_KEY="${SECRET_KEY:-00000111112222233333444445555566666777778888899999}"
 
 # 静态资源 URL 及目录
 STATIC_URL="${STATIC_URL:-/dj/static/}"
-STATIC_ROOT="${STATIC_ROOT:-/cnicg/projs/${GROUP_CODENAME}/${PROJ_CODENAME}/web}"
+STATIC_ROOT="${STATIC_ROOT:-/cnicg/projs/${IMAGE_NAME}/web}"
 
 # 动态资源 URL 及目录
 MEDIA_URL="${MEDIA_URL:-/media/}"
-MEDIA_ROOT="${MEDIA_ROOT:-/cnicg/media/${GROUP_CODENAME}/${PROJ_CODENAME}}"
+MEDIA_ROOT="${MEDIA_ROOT:-/cnicg/media/${IMAGE_NAME}}"
 
 # 日志
-PROJ_LOG_DIR="${PROJ_LOG_DIR:-/cnicg/logs/${GROUP_CODENAME}/${PROJ_CODENAME}}"
+PROJ_LOG_DIR="${PROJ_LOG_DIR:-/cnicg/logs/${IMAGE_NAME}}"
 PROG_LOG_FILE="${PROG_LOG_FILE:-${PROJ_LOG_DIR}/root.log}"
 
 # raven(sentry)
@@ -37,8 +30,9 @@ RAVEN_DSN="${RAVEN_DSN:-}"
 
 # 容器运行端口
 PROJ_WEB_PORT="${PROJ_WEB_PORT:-8000}"
+# PROJ_GRPC_PORT="${PROJ_GRPC_PORT:-8002}"
 # 域名
-PROJ_DOMAIN="${PROJ_DOMAIN:-${PROJ_CODENAME}.${GROUP_CODENAME}.work.com}"
+PROJ_DOMAIN="${PROJ_DOMAIN:-${IMAGE_NAME}.work.com}"
 # 前端代码目录
 PUB_WWW_ROOT="${PUB_WWW_ROOT:-${PROJ_GIT_DIR}/www/default/dist}"
 ADMIN_WWW_ROOT="${ADMIN_WWW_ROOT:-${PROJ_GIT_DIR}/www/admin/dist}"
@@ -49,10 +43,10 @@ ADMIN_WWW_ROOT="${ADMIN_WWW_ROOT:-${PROJ_GIT_DIR}/www/admin/dist}"
 # NUXT_NODE_BIN="${NUXT_NODE_BIN:-/cnicg/app/nvm/versions/node/v10.15.3/bin/node}"
 
 # 数据库连接配置
-DB_URI="${DB_URI:-mysql://127.0.0.1:3306/db_${GROUP_CODENAME}_${PROJ_CODENAME}?charset=utf8}"
+DB_URI="${DB_URI:-mysql://root:example@127.0.0.1:3306/${_IMAGE_NAME_}?charset=utf8}"
 
 # celery
-# CELERY_BROKER_URL="${CELERY_BROKER_URL:-amqp://127.0.0.1/%2f${GROUP_CODENAME}_${PROJ_CODENAME}}"
+# CELERY_BROKER_URL="${CELERY_BROKER_URL:-amqp://127.0.0.1/%2f${IMAGE_NAME}}"
 # CELERY_LOG_FILE="${CELERY_LOG_FILE:-${PROJ_LOG_DIR}/celery.log}"
 # CELERY_BEAT_CONFIG="${CELERY_BEAT_CONFIG:-${PROJ_GIT_DIR}/scripts/host/celery_beat.yml}"
 

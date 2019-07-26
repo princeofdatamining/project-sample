@@ -3,5 +3,5 @@
 ## Build
 
 ```shell
-scripts/deliver/pack.sh . [--skip-rm] [--skip-resources]
+scripts/deliver/pack.sh . [--skip-resources]
 ```

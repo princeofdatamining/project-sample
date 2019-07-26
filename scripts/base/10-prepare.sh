@@ -5,7 +5,7 @@
 cd ${PROJ_GIT_DIR}
 
 # 动态资源
-mkdir -p ${MEDIA_ROOT}
+[ -n "${MEDIA_ROOT}" ] && mkdir -p ${MEDIA_ROOT}
 
 # 数据库变更
 [[ $@ =~ "--migrate" ]] && ${PROJ_PYTHON} manage.py migrate

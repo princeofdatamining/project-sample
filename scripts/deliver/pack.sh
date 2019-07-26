@@ -8,14 +8,14 @@ IMAGE_NAME=${IMAGE_NAME:-test-djample}
 PROJ_NAME=${IMAGE_NAME}-${PROJ_VERSION}
 
 [ ! -d ${PROJ_NAME} -a ! "$1" == "."  ] && git clone -q --recursive ${PROJ_GIT_URL} -b ${PROJ_GIT_BRANCH} ${PROJ_NAME}
-
 [ ! "$1" == "." ] && cd ${PROJ_NAME}
-[[ ! $@ =~ "--skip-rm" ]] && (rm -rf .git*;
-rm -rf scripts/deliver/pack* scripts/docker/build*;
-rm -rf scripts/{ci,dev,docker,gauges,live};
-rm -rf scripts/host/{00,01}-git*.sh Jenkinsfile Dockerfile)
 
-sed -i -e 1c"PROJ_GIT_DIR=/cnicg/projs/${IMAGE_NAME}" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_WEB_PORT=.*/PROJ_WEB_PORT=8000/" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_GRPC_PORT=.*/PROJ_GRPC_PORT=8002/" scripts/base/environ.sample.rc
+#
+#
+
+sed -i "s/PROJ_GIT_DIR=.*/PROJ_GIT_DIR=\/cnicg\/projs\/${IMAGE_NAME}/" scripts/base/environ.sample.rc
 sed -i "s/PROJ_PYTHON_VER=.*/PROJ_PYTHON_VER=/" scripts/base/environ.sample.rc
 sed -i "s/PROJ_PYTHON_ENV=.*/PROJ_PYTHON_ENV=/" scripts/base/environ.sample.rc
 sed -i "s/PROJ_PYTHON_BIN=.*/PROJ_PYTHON_BIN=\/usr\/local\/bin/" scripts/base/environ.sample.rc
@@ -49,4 +49,8 @@ tar -czvf /cnicg/download/${PROJ_NAME}.tar.gz \
   ${PROJ_NAME}
 echo ${PROJ_NAME}
 cd -; rm -rf /tmp/${PROJ_NAME}
+#
+#
+#
+#
 #
