@@ -1,10 +1,13 @@
-. .projrc
+. ./.projrc
 
 NOPYENV=; NOPIP=; DOUNINSTALL=; NOENVIRON=; NOCOLLECT=; NOPREPARE=; DOMIGRATE=; NOHOST=; NONUXT=;
+NOPIP_HOST=; DOPIP_DEV=;
 while true; do
   case "$1" in
     --no-pyenv ) NOPYENV=$1; echo NOPYENV=${NOPYENV}; shift ;;
     --no-pip ) NOPIP=$1; echo NOPIP=${NOPIP}; shift ;;
+    --no-pip-host ) NOPIP_HOST=$1; echo NOPIP_HOST=${NOPIP_HOST}; shift ;;
+    --pip-dev ) DOPIP_DEV=$1; echo DOPIP_DEV=${DOPIP_DEV}; shift ;;
     --uninstall ) DOUNINSTALL=$1; echo DOUNINSTALL=${DOUNINSTALL}; shift ;;
     --no-environ ) NOENVIRON=$1; echo NOENVIRON=${NOENVIRON}; shift ;;
     --no-collect ) NOCOLLECT=$1; echo NOCOLLECT=${NOCOLLECT}; shift ;;
@@ -24,8 +27,9 @@ $SHELL ./scripts/host/02-pyenv.sh;
 # 安装依赖
 [ -z "${NOPIP}" ] && echo "exec: pip" && (
 $SHELL ./scripts/base/01-submodules.sh ${DOUNINSTALL};
-$SHELL ./scripts/base/02-pip.sh;
-$SHELL ./scripts/host/02-pip.sh;
+$SHELL ./scripts/base/02-pip.sh; [ -z "${NOPIP_HOST}" ] && \
+$SHELL ./scripts/host/02-pip.sh; [ -n "${DOPIP_DEV}" ] && \
+$SHELL ./scripts/dev/02-pip.sh;
 )
 # 更新项目配置
 [ -z "${NOENVIRON}" ] && echo "base: environ" && (
@@ -41,6 +45,7 @@ $SHELL ./scripts/host/19-uwsgi.sh;
 $SHELL ./scripts/host/19-supervisor.sh;
 $SHELL ./scripts/host/19-nginx.sh;#[ -z "${NONUXT}" ] && \
 #SHELL ./scripts/host/19-nuxt.sh;
-#SHELL ./scripts/host/18-celerybeat.sh;
+#
+#
 )
 echo "flush done."

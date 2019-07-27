@@ -16,32 +16,35 @@ PROJ_NAME=${IMAGE_NAME}-${PROJ_VERSION}
 #
 
 sed -i "s/PROJ_GIT_DIR=.*/PROJ_GIT_DIR=\/cnicg\/projs\/${IMAGE_NAME}/" scripts/base/environ.sample.rc
-sed -i "s/PROJ_PYTHON_VER=.*/PROJ_PYTHON_VER=/" scripts/base/environ.sample.rc
-sed -i "s/PROJ_PYTHON_ENV=.*/PROJ_PYTHON_ENV=/" scripts/base/environ.sample.rc
-sed -i "s/PROJ_PYTHON_BIN=.*/PROJ_PYTHON_BIN=\/usr\/local\/bin/" scripts/base/environ.sample.rc
-sed -i "s/PROJ_PYTHON=.*/PROJ_PYTHON=\/usr\/bin\/python36/" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_PYTHON_VER=.*/PROJ_PYTHON_VER=/" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_PYTHON_ENV=.*/PROJ_PYTHON_ENV=/" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_PYTHON_BIN=.*/PROJ_PYTHON_BIN=\/usr\/local\/bin/" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_PYTHON=.*/PROJ_PYTHON=\/usr\/bin\/python36/" scripts/base/environ.sample.rc
 
 sed -i "s/STATIC_ROOT=.*/STATIC_ROOT=\${PROJ_GIT_DIR}\/web/" scripts/base/environ.sample.rc
-sed -i "s/MEDIA_ROOT=.*/MEDIA_ROOT=\/cnicg\/media\/${IMAGE_NAME}/" scripts/base/environ.sample.rc
-sed -i "s/PROJ_LOG_DIR=.*/PROJ_LOG_DIR=\/cnicg\/logs\/${IMAGE_NAME}/" scripts/base/environ.sample.rc
+#sed -i "s/MEDIA_ROOT=.*/MEDIA_ROOT=\/cnicg\/media\/${IMAGE_NAME}/" scripts/base/environ.sample.rc
+#sed -i "s/PROJ_LOG_DIR=.*/PROJ_LOG_DIR=\/cnicg\/logs\/${IMAGE_NAME}/" scripts/base/environ.sample.rc
 
-sed -i "s/ \${PROJ_PYTHON}/ sudo \${PROJ_PYTHON}/" scripts/base/01-submodules.sh
-sed -i "s/^\${PROJ_PIP}/sudo \${PROJ_PIP}/" scripts/base/02-pip.sh
-sed -i "s/^\${PROJ_PIP}/sudo \${PROJ_PIP}/" scripts/dev/02-pip.sh
-sed -i "s/^\${PROJ_PIP}/sudo \${PROJ_PIP}/" scripts/host/02-pip.sh
+#sed -i "s/ \${PROJ_PYTHON}/ sudo \${PROJ_PYTHON}/" scripts/base/01-submodules.sh
+#sed -i "s/^\${PROJ_PIP}/sudo \${PROJ_PIP}/" scripts/base/02-pip.sh
+#sed -i "s/^\${PROJ_PIP}/sudo \${PROJ_PIP}/" scripts/dev/02-pip.sh
+#sed -i "s/^\${PROJ_PIP}/sudo \${PROJ_PIP}/" scripts/host/02-pip.sh
 [ -f "scripts/requirements.txt"      ] && sed -i "s/http\:\/\/git\.dev\.cnicg\.cn\/cnicg\/apps\/django_celery_management/https\:\/\/github.com\/princeofdatamining\/django_celery_management/" scripts/requirements.txt
 [ -f "scripts/base/requirements.txt" ] && sed -i "s/http\:\/\/git\.dev\.cnicg\.cn\/cnicg\/apps\/django_celery_management/https\:\/\/github.com\/princeofdatamining\/django_celery_management/" scripts/base/requirements.txt
 
-sed -i "s/\/resources.git\/nginx\//\/conf\/nginx\/optimize\//" scripts/host/19-nginx.sh
+#sed -i "s/\/resources.git\/nginx\//\/conf\/nginx\/optimize\//" scripts/host/19-nginx.sh
 
-sed -i "s/^virtualenv/# virtualenv/" scripts/host/19-uwsgi.sh
-sed -i "s/^# pythonpath/pythonpath/" scripts/host/19-uwsgi.sh
+#sed -i "s/^virtualenv/# virtualenv/" scripts/host/19-uwsgi.sh
+#sed -i "s/^# pythonpath/pythonpath/" scripts/host/19-uwsgi.sh
 
+#
+#
 if [ "$1" == "." ]; then
-    rm -rf /tmp/${PROJ_NAME}; mkdir /tmp/${PROJ_NAME}; cp -r ./* /tmp/${PROJ_NAME}/; cd /tmp
-else
-    cd ..
+    rm -rf /tmp/${PROJ_NAME}; mkdir /tmp/${PROJ_NAME}; cp -r ./* /tmp/${PROJ_NAME}/; cd /tmp/${PROJ_NAME}
+    # mv www/admin/dist www/admin_dist; rm -rf www/admin; mv www/admin_dist www/admin;
+    # mv www/default/dist www/default_dist; rm -rf www/default; mv www/default_dist www/default;
 fi
+cd .. # `pwd`/${PROJ_NAME} MUST BE exist
 tar -czvf /cnicg/download/${PROJ_NAME}.tar.gz \
   --exclude-vcs --exclude=*/scripts/deliver/pack* \
   --exclude=*/scripts/ansible --exclude=*/scripts/ci --exclude=*/scripts/dev --exclude=*/scripts/docker --exclude=*/scripts/gauges --exclude=*/scripts/live \
@@ -49,8 +52,4 @@ tar -czvf /cnicg/download/${PROJ_NAME}.tar.gz \
   ${PROJ_NAME}
 echo ${PROJ_NAME}
 cd -; rm -rf /tmp/${PROJ_NAME}
-#
-#
-#
-#
 #

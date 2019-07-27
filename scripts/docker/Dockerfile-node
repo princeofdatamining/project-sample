@@ -1,7 +1,0 @@
-FROM node
-
-RUN mkdir -p /tmp/www /usr/src/www
-WORKDIR /tmp/www
-COPY src/www/is ./
-
-RUN npm i -g yarn && yarn install && cp -r node_modules /usr/src/www/ && rm -rf $(pwd)

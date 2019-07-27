@@ -1,5 +1,5 @@
 # 环境变量
-. .projrc
+. ./.projrc
 
 # 设定工作目录
 cd ${PROJ_GIT_DIR}

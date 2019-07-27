@@ -1,6 +1,7 @@
-. .projrc && echo "# -*- coding: utf-8 -*-" > environ/default.py && cat <<EOF >> environ/default.py
+. ./.projrc && echo "# -*- coding: utf-8 -*-" > environ/default.py && cat <<EOF >> environ/default.py
 #import pymysql; pymysql.install_as_MySQLdb()
-from applus.environ import get_envfunc, update_django_dbs
+from applus.environ import get_envfunc, update_django_dbs, update_django_caches
+#
 
 
 read_env = get_envfunc("")
@@ -15,12 +16,36 @@ default_db_values = {
 }
 
 
+# Classes used to implement DB routing behavior.
+DATABASE_ROUTERS = ["applus.django.db_router.ConfigurableDatabaseRouter"]
+
+# { db: apps } 对应关系，如："dbx=app3,app4 dby=app8,app9"
+DATABASE_APPS = read_env("DATABASE_APPS", "${DATABASE_APPS}")
+
+# 不需要 migrate 的 dbs，如："dbx dby"
+DATABASE_NEVER_MIGRATES = read_env("DATABASE_NEVER_MIGRATES", "${DATABASE_NEVER_MIGRATES}").split()
+
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 SECRET_KEY = read_env("SECRET_KEY", "${SECRET_KEY}")
 
-# celery 消息队列设置
-# CELERY_BROKER_URL = read_env("CELERY_BROKER_URL", "${CELERY_BROKER_URL}")
-# CELERY_BEAT_CONFIG = read_env("CELERY_BEAT_CONFIG", "${CELERY_BEAT_CONFIG}")
+# Celery 消息队列 的配置
+CELERY_BROKER_URL = read_env("CELERY_BROKER_URL", "${CELERY_BROKER_URL}")
+
+# Celery任务结果数据库 的配置
+CELERY_RESULT_BACKEND = read_env("CELERY_RESULT_BACKEND", "${CELERY_RESULT_BACKEND}")
+
+# celery 任务配置文件
+CELERY_BEAT_CONFIG = read_env("CELERY_BEAT_CONFIG", "${CELERY_BEAT_CONFIG}")
+
+# celery 启用异步调用
+CELERY_ENABLE_DELAY = read_env("CELERY_ENABLE_DELAY", ${CELERY_ENABLE_DELAY:-True}, bool)
+
+# caches
+CACHES = update_django_caches({}, read_env("CACHES", "${CACHES}"))
+
+# session
+SESSION_ENGINE = read_env("SESSION_ENGINE", "${SESSION_ENGINE}")
+SESSION_CACHE_ALIAS = read_env("SESSION_CACHE_ALIAS", "${SESSION_CACHE_ALIAS}")
 
 # 后端服务的静态资源
 STATIC_URL = read_env("STATIC_URL", "${STATIC_URL}")
@@ -39,7 +64,7 @@ def merge(g):
     update_django_dbs(g['DATABASES'], read_env("DB_URI", "${DB_URI}"), **default_db_values)
     # 日志
     g['LOGGING']['handlers']['file']['filename'] = read_env("PROG_LOG_FILE", "${PROG_LOG_FILE}")
-    # g['LOGGING']['handlers']['celery']['filename'] = read_env("CELERY_LOG_FILE", "${CELERY_LOG_FILE}")
+    g['LOGGING']['handlers']['celery']['filename'] = read_env("CELERY_LOG_FILE", "${CELERY_LOG_FILE}")
     # raven（sentry）设置
     g['RAVEN_CONFIG']['dsn'] = read_env("RAVEN_DSN", "${RAVEN_DSN}")
     ###########################
@@ -47,6 +72,7 @@ def merge(g):
     ###########################
     # 更改日志级别
     import sys
+    if g['DEBUG']: g['LOGGING']['loggers']['django.db.backends']['level'] = "DEBUG"
     # g['INSTALLED_APPS'].append('debug_toolbar')
     # g['MIDDLEWARE_CLASSES'].insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 

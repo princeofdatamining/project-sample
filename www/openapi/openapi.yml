@@ -1,0 +1,558 @@
+openapi: 3.0.2
+info:
+  title: "接口文档"
+  version: 0.0.1
+servers:
+  - url: /
+tags:
+  # 按功能分组
+  - name: 功能：帐号管理
+  - name: 功能：统计
+  - name: 功能：常用功能
+  # 按角色分组
+  - name: 角色：运营人员
+  - name: 角色：公开
+paths:
+  ############
+  # 帐号管理 #
+  ############
+  /api/auth/login/:
+    post:
+      summary: 登录
+      description: 登录帐号
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      requestBody:
+        description: 帐号信息
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+      responses:
+        '201':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginProfile'
+        '400':
+          $ref: '#/components/responses/400'
+  /api/auth/profile/:
+    get:
+      summary: 获取帐号信息
+      description: 当前帐号信息
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginProfile'
+  /api/auth/token/:
+    get:
+      summary: 获取令牌
+      description: 获取令牌
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginToken'
+  /api/auth/logout/:
+    delete:
+      summary: 退出登录
+      description: 退出登录
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+  /api/auth/password/:
+    put:
+      summary: 修改密码
+      description: 修改密码
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      requestBody:
+        description: 新旧密码
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+      responses:
+        '200':
+          description: 成功
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+  /api/auth/retoken/:
+    put:
+      summary: 重置令牌
+      description: 重置令牌
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      requestBody:
+        description: 密码
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/password'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginToken'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+  /api/admin/users/:
+    get:
+      summary: 列出用户
+      description: 角色限定：运营人员
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      parameters:
+        - $ref: '#/components/parameters/query_is_superuser'
+        - $ref: '#/components/parameters/query_is_staff'
+        - $ref: '#/components/parameters/query_is_active'
+        - $ref: '#/components/parameters/query_search'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/UserForAdmin'
+    post:
+      summary: 创建运营人员
+      description: 角色限定：超级管理员
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+  /api/admin/users/{username}/:
+    parameters:
+      - $ref: '#/components/parameters/path_username'
+    get:
+      summary: 获取用户信息
+      description: 角色限定：运营人员
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserForAdmin'
+        '404':
+          $ref: '#/components/responses/404'
+  /api/admin/users/{username}/password/:
+    parameters:
+      - $ref: '#/components/parameters/path_username'
+    put:
+      summary: 重置密码
+      description: 角色限定：运营人员，对象限定：超级管理员对非超管、运营人员对普通用户
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+      responses:
+        '200':
+          description: 成功
+        '400':
+          $ref: '#/components/responses/400'
+  /api/admin/users/{username}/active/:
+    parameters:
+      - $ref: '#/components/parameters/path_username'
+    put:
+      summary: 启用/禁用用户
+      description: 角色限定：运营人员，对象限定：超级管理员对非超管、运营人员对普通用户
+      tags:
+        - 功能：帐号管理
+        - 角色：运营人员
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserActive'
+      responses:
+        '200':
+          description: 成功
+        '400':
+          $ref: '#/components/responses/400'
+  ######################
+  # 客户、应用、数据项 #
+  ######################
+  ############
+  # 发码管理 #
+  ############
+  ############
+  # 数据接入 #
+  ############
+  ########
+  # 统计 #
+  ########
+  ############
+  # 常用功能 #
+  ############
+components:
+  schemas:
+    # 独立的字段 字段名(小写) 如 schemas/is_active
+    # 多字段复用 fields_(of_)资源_用途 如 schemas/fields_user_private
+    # 请求或响应 资源+场景(驼峰) 如 schemas/LoginProfile
+    #
+    ########
+    # 通用 #
+    ########
+    id:
+      properties:
+        id:
+          type: integer
+    is_active:
+      properties:
+        is_active:
+          type: boolean
+          description: 是否启用(false=禁用，true=启用)
+    is_hidden:
+      properties:
+        is_hidden:
+          type: boolean
+          description: 是否隐藏(false=显示，true=隐藏)
+    priority:
+      properties:
+        priority:
+          type: integer
+          description: 优先级
+    create_time:
+      properties:
+        create_time:
+          type: string
+          format: date-time
+          description: 创建时间
+    date:
+      properties:
+        date:
+          type: string
+          format: date
+          description: 日期
+    download_url:
+      properties:
+        download_url:
+          type: string
+          description: 下载链接
+    ##########################
+    # rest_framework(django) #
+    ##########################
+    ValidationError:
+      description: 校验提示
+      properties:
+        field:
+          description: 关联数据项
+          type: string
+          nullable: true
+        code:
+          description: 错误代码，特殊情况下允许 integer
+          type: string
+        message:
+          description: 错误提示
+          type: string
+    Pagination:
+      description: 分页
+      properties:
+        count:
+          type: integer
+          description: 数据集总数(非当前页)
+        next:
+          type: string
+          format: uri
+          description: 下一页
+        previous:
+          type: string
+          format: uri
+          description: 上一页
+    ############
+    # 帐号管理 #
+    ############
+    username:
+      properties:
+        username:
+          type: string
+          description: 帐号
+    password:
+      properties:
+        password:
+          type: string
+          description: 密码
+    new_password:
+      properties:
+        new_password:
+          type: string
+          format: password
+          description: 新的密码
+    fields_user_private:
+      properties:
+        email:
+          type: string
+          format: email
+          description: 邮件地址
+        is_superuser:
+          type: boolean
+          description: 是否超级管理员
+        is_staff:
+          type: boolean
+          description: 是否管理员
+        date_joined:
+          type: string
+          format: date-time
+          description: 创建时间
+    LoginForm:
+      description: 登录项
+      allOf:
+        - $ref: '#/components/schemas/username'
+        - $ref: '#/components/schemas/password'
+    LoginProfile:
+      description: 登录信息
+      allOf:
+        - $ref: '#/components/schemas/username'
+        - $ref: '#/components/schemas/fields_user_private'
+    LoginToken:
+      description: 登录令牌
+      properties:
+        key:
+          type: string
+          description: 令牌
+    UserPasswordChange:
+      description: 修改密码
+      allOf:
+        - $ref: '#/components/schemas/password'
+        - $ref: '#/components/schemas/new_password'
+    UserForAdmin:
+      description: 用户信息
+      allOf:
+        - $ref: '#/components/schemas/id'
+        - $ref: '#/components/schemas/username'
+        - $ref: '#/components/schemas/fields_user_private'
+        - $ref: '#/components/schemas/is_active'
+    UserCreate:
+      description: 新建用户
+      allOf:
+        - $ref: '#/components/schemas/username'
+        - $ref: '#/components/schemas/new_password'
+    UserPasswordReset:
+      description: 重置密码
+      allOf:
+        - $ref: '#/components/schemas/new_password'
+    UserActive:
+      description: 启用/禁用
+      allOf:
+        - $ref: '#/components/schemas/is_active'
+    user_id:
+      properties:
+        user_id:
+          type: integer
+          description: 用户id
+    ######################
+    # 客户、应用、数据项 #
+    ######################
+    ############
+    # 发码管理 #
+    ############
+    ############
+    # 数据接入 #
+    ############
+    ########
+    # 统计 #
+    ########
+    ############
+    # 常用功能 #
+    ############
+  parameters:
+    # 路径参数: path_参数名(小写) 如 parameters/path_username
+    # 查询参数: queryh_参数名(小写) 如 parameters/query_is_active
+    #
+    ########
+    # 通用 #
+    ########
+    path_id:
+      in: path
+      required: true
+      name: id
+      description: 主键
+      schema:
+        type: integer
+    query_search:
+      in: query
+      required: false
+      name: search
+      description: 搜索关键词
+      schema:
+        type: string
+    query_is_active:
+      in: query
+      required: false
+      name: is_active
+      description: 是否启用(0=否, 1=是)
+      schema:
+        type: integer
+    query_is_hidden:
+      in: query
+      required: false
+      name: is_hidden
+      description: 是否隐藏(0=否, 1=是)
+      schema:
+        type: integer
+    query_date_gte:
+      in: query
+      required: false
+      name: date_gte
+      description: 起始日期
+      schema:
+        type: string
+        format: date
+    query_date_lte:
+      in: query
+      required: false
+      name: date_lte
+      description: 终止日期
+      schema:
+        type: string
+        format: date
+    query_gte__axis:
+      in: query
+      required: false
+      name: gte
+      description: 起始日期
+      schema:
+        type: string
+        format: date
+    query_lte__axis:
+      in: query
+      required: false
+      name: lte
+      description: 终止日期
+      schema:
+        type: string
+        format: date
+    query_unit__axis:
+      in: query
+      required: false
+      name: unit
+      description: 时间分布(day=按天, week=按周, month=按月, year=按年)
+      schema:
+        type: string
+    ############
+    # 帐号管理 #
+    ############
+    path_username:
+      in: path
+      required: true
+      name: username
+      description: 帐号
+      schema:
+        type: string
+    query_is_superuser:
+      in: query
+      required: false
+      name: is_superuser
+      description: 超级管理员(0=否, 1=是)
+      schema:
+        type: integer
+    query_is_staff:
+      in: query
+      required: false
+      name: is_staff
+      description: 运营人员(0=否, 1=是)
+      schema:
+        type: integer
+    query_user_id:
+      in: query
+      required: false
+      name: user_id
+      description: 帐号ID
+      schema:
+        type: integer
+  responses:
+    ##########################
+    # rest_framework(django) #
+    ##########################
+    '201':
+      description: 创建成功
+    '204':
+      description: 空
+    '400':
+      description: 校验提示
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ValidationError'
+    '401':
+      description: 未登录，或未设定令牌
+    '403':
+      description: 权限不够
+    '404':
+      description: 资源不存在
+    '405':
+      description: 功能未开放
+  securitySchemes:
+    ##########################
+    # rest_framework(django) #
+    ##########################
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: http
+      scheme: bearer
+      description: 登录令牌
+security:
+  ##########################
+  # rest_framework(django) #
+  ##########################
+  - cookieAuth: []
+  - tokenAuth: []

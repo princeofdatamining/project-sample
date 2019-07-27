@@ -1,4 +1,4 @@
-. .projrc && echo "# -*- coding: utf-8 -*-" > scripts/gauges/utils/settings.py && cat <<EOF >> scripts/gauges/utils/settings.py
+. ./.projrc && echo "# -*- coding: utf-8 -*-" > scripts/gauges/utils/settings.py && cat <<EOF >> scripts/gauges/utils/settings.py
 from applus.environ import get_envfunc
 
 

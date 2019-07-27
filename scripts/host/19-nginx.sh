@@ -1,4 +1,4 @@
-. .projrc && cat <<EOF > scripts/host/nginx.conf
+. ./.projrc && cat <<EOF > scripts/host/nginx.conf
 server {
   listen 80;
   server_name ${PROJ_DOMAIN};

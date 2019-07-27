@@ -40,12 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'raven.contrib.django',
+    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_celery_beat',
+    'django_celery_management',
     'applus',
     'drf_auth',
-    #
+    # 'corsheaders',
     'libtest',
+    'celerytab',
     'projapp',
 ]
 
@@ -97,18 +102,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    { 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    { 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    { 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    { 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
 
@@ -155,6 +152,13 @@ LOGGING = {
             'formatter': 'simple',
             'class': 'logging.StreamHandler',
         },
+        'celery': {
+            'level': 'DEBUG',
+            'formatter': 'simple',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, '.data/log/celery.log'),
+            'encoding': 'utf-8',
+        },
         'file': {
             'level': 'DEBUG',
             'formatter': 'simple',
@@ -168,7 +172,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'firmcode': {
+        'celery': {
+            'handlers': ['console', 'celery'],
+            'level': 'INFO',
+        },
+        'sample': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
         },
@@ -178,7 +186,7 @@ LOGGING = {
 
 # https://docs.sentry.io/clients/python/integrations/django/
 
-VERSION = '2.2.0.2'
+VERSION = '2.2.0.3'
 
 RAVEN_CONFIG = {
     'dsn': '',
@@ -189,7 +197,7 @@ RAVEN_CONFIG = {
 # http://docs.celeryproject.org/en/latest/django/
 # https://github.com/celery/celery/blob/master/examples/django/proj/settings.py
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost/%2fna_stats'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost/%2ftest-sample'
 CELERY_RESULT_BACKEND = 'db+sqlite:///.data/celery.sqlite'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -204,7 +212,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ORIGIN_REGEX_WHITELIST = [
-    '^(https?://)?(.+)\.cniotroot\.cn(\:\d+)?$',
+    '^(https?://)?(.+)\.work\.com(\:\d+)?$',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -215,12 +223,14 @@ REST_FRAMEWORK = {
     'DEFAULT_VERSION': '1.0',
     # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'applus.rest_framework.authentication.MultiKeywordsTokenAuthentication', # inherit from TokenAuthentication
         'rest_framework.authentication.SessionAuthentication',
     ),
     # 'UNAUTHENTICATED_USER': 'XXX.models.Anonymous',
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
+        #
     ],
     # Pagination
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

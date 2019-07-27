@@ -1,5 +1,5 @@
 # 环境变量
-. .projrc
+. ./.projrc
 
 . scripts/gauges/gauge.py.sh
 
