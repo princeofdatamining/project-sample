@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'raven.contrib.django',
+    # 'raven.contrib.django',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
@@ -184,6 +184,7 @@ LOGGING = {
 }
 
 
+# https://docs.sentry.io/platforms/python/django/
 # https://docs.sentry.io/clients/python/integrations/django/
 
 VERSION = '2.2.0.3'
@@ -242,9 +243,16 @@ REST_FRAMEWORK = {
     ),
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
     'DATETIME_INPUT_FORMATS': ('iso-8601', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S'),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework_yaml.parsers.YAMLParser',
+    ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework_yaml.renderers.YAMLRenderer',
     ),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'EXCEPTION_HANDLER': 'applus.rest_framework.views.exception_handler',
@@ -264,3 +272,14 @@ except ImportError:
     pass
 else:
     merge(globals())
+
+
+# https://docs.sentry.io/platforms/python/django/
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn=RAVEN_CONFIG['dsn'],
+    integrations=[DjangoIntegration()]
+)

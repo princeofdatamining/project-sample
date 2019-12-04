@@ -26,6 +26,7 @@ done
 
 [ ! -d ${PROJ_NAME} ] && git clone -q --recursive ${PROJ_GIT_URL} -b ${PROJ_GIT_BRANCH} ${PROJ_NAME}
 [ ! "${PROJ_NAME}" == "." ] && cd ${PROJ_NAME}
+./scripts/base/00-git-HEAD.sh .GITCOMMIT
 
 [ -z "${NO_RM}" ] && ([ -d /tmp/${IMAGE_NAME} ] && rm -rf /tmp/${IMAGE_NAME}; mkdir /tmp/${IMAGE_NAME}; mv .git* /tmp/${IMAGE_NAME}/;\
 rm -rf scripts/deliver/pack* scripts/docker/build*;\

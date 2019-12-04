@@ -30,3 +30,14 @@ urlpatterns = [
     path('api/feat/', include('libtest.biz.urls')),
     path('api/admin/feat/', include('libtest.admin.urls')),
 ]
+
+
+# 验证 sentry 服务
+# https://docs.sentry.io/platforms/python/django/
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
+if settings.DEBUG:
+    urlpatterns.insert(0, path('views/sentry/debug/', trigger_error))

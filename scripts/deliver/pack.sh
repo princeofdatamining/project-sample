@@ -9,6 +9,7 @@ PROJ_NAME=${IMAGE_NAME}-${PROJ_VERSION}
 
 [ ! -d ${PROJ_NAME} -a ! "$1" == "."  ] && git clone -q --recursive ${PROJ_GIT_URL} -b ${PROJ_GIT_BRANCH} ${PROJ_NAME}
 [ ! "$1" == "." ] && cd ${PROJ_NAME}
+./scripts/base/00-git-HEAD.sh GITHEAD.txt
 
 #sed -i "s/PROJ_WEB_PORT=.*/PROJ_WEB_PORT=8000/" scripts/base/environ.sample.rc
 #sed -i "s/PROJ_GRPC_PORT=.*/PROJ_GRPC_PORT=8002/" scripts/base/environ.sample.rc
@@ -39,17 +40,18 @@ sed -i "s/STATIC_ROOT=.*/STATIC_ROOT=\${PROJ_GIT_DIR}\/web/" scripts/base/enviro
 
 #
 #
+#
 if [ "$1" == "." ]; then
     rm -rf /tmp/${PROJ_NAME}; mkdir /tmp/${PROJ_NAME}; cp -r ./* /tmp/${PROJ_NAME}/; cd /tmp/${PROJ_NAME}
     # mv www/admin/dist www/admin_dist; rm -rf www/admin; mv www/admin_dist www/admin;
     # mv www/default/dist www/default_dist; rm -rf www/default; mv www/default_dist www/default;
+    #
 fi
 cd .. # `pwd`/${PROJ_NAME} MUST BE exist
-tar -czvf /cnicg/download/${PROJ_NAME}.tar.gz \
+tar -czf /cnicg/download/${PROJ_NAME}.tar.gz \
   --exclude-vcs --exclude=*/scripts/deliver/pack* \
   --exclude=*/scripts/ansible --exclude=*/scripts/ci --exclude=*/scripts/dev --exclude=*/scripts/docker --exclude=*/scripts/gauges --exclude=*/scripts/live \
   --exclude=Jenkinsfile --exclude=Dockerfile \
   ${PROJ_NAME}
 echo ${PROJ_NAME}
 cd -; rm -rf /tmp/${PROJ_NAME}
-#
