@@ -5,6 +5,8 @@
 *.sqlite*
 *_ignore.py
 __pycache__/
+node_modules/
+/Dockerfile
 /docs/*.log
 /environ/
 /scripts/host/10-prepare.sh

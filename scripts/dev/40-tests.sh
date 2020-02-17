@@ -9,7 +9,9 @@ APPS=""
 listall() {
     for folder in `ls "$1"`; do
         appname=$folder
-        if [ -f "$1/$folder/tests.py" ]; then
+        if [ "$folder" == "skip_test" ]; then
+            echo "- skip $folder"
+        elif [ -f "$1/$folder/tests.py" ]; then
             echo "+ test $folder.tests(file)"
             APPS="$APPS$folder.tests "
         elif [ -d "$1/$folder/tests" ]; then

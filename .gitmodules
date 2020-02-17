@@ -4,3 +4,6 @@
 [submodule "libs/drf_auth"]
 	path = libs/drf_auth
 	url = git@github.com:princeofdatamining/django-restframework-auth.git
+[submodule "libs/django_celery_management"]
+	path = libs/django_celery_management
+	url = git@github.com:princeofdatamining/django_celery_management.git

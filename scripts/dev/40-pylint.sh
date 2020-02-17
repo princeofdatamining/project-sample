@@ -6,7 +6,9 @@ cd ${PROJ_GIT_DIR}
 
 lint() {
     for folder in `ls "$1"`; do
-        if [ -f "$1/$folder/__init__.py" ]; then
+        if [ "$folder" == "django_celery_management" ]; then
+            echo "pylint $1/$folder SKIPPED"
+        elif [ -f "$1/$folder/__init__.py" ]; then
             echo "pylint $1/$folder ..."
             ${PROJ_PYTHON_BIN}/pylint "$1/$folder"
         fi

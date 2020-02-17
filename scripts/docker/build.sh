@@ -1,37 +1,33 @@
-# 项目Git仓库
+# 项目 Git 仓库 & 分支
 PROJ_GIT_URL=git@github.com:princeofdatamining/project-sample.git
-# 项目Git版本分支
 PROJ_GIT_BRANCH=${BRANCH_NAME:-master}
-PROJ_NAME=src
-# 打包文件
+# 镜像名称
 IMAGE_NAME=${IMAGE_NAME:-test-djample}
-IMAGE_SUFFIX=""
+# 项目目录
+PROJ_PATH=src
+PROJ_TMP="/tmp/${IMAGE_NAME}/$(date +'%s.%N')"
 
-NO_RM=""; NO_RES=""; NO_BLD=""; BLD_PYTHON=""; BLD_NODE=""; BLD_NUXT="";
+# 处理参数
+BLD_MAIN=""; BLD_PYTHON=""; BLD_NUXT=""; BLD_NODE=""; NO_RES="";
 while true; do
   case "$1" in
-    "." | "[.]" ) PROJ_NAME="."; echo PROJ_NAME=${PROJ_NAME}; shift ;;
-    --gauge | "[--gauge]" ) IMAGE_SUFFIX="-gauge"; echo IMAGE_SUFFIX=${IMAGE_SUFFIX}; shift ;;
-
-    --skip-rm | "[--skip-rm]" ) NO_RM=$1; echo NO_RM=${NO_RM}; shift ;;
-    --skip-resources | "[--skip-resources]" ) NO_RES=$1; echo NO_RES=${NO_RES}; shift ;;
-    --skip-image | "[--skip-image]" ) NO_BLD=$1; echo NO_BLD=${NO_BLD}; shift ;;
-
-    --python | "[--python]" ) BLD_PYTHON=$1; echo BLD_PYTHON=${BLD_PYTHON}; shift ;;
-    --node | "[--node]" ) BLD_NODE=$1; echo BLD_NODE=${BLD_NODE}; shift ;;
-    --nuxt | "[--nuxt]" ) BLD_NUXT=$1; echo BLD_NUXT=${BLD_NUXT}; shift ;;
-    * ) break ;;
+    "." ) PROJ_PATH=$1; echo PROJ_PATH=${PROJ_PATH}; shift ;;
+    --path ) PROJ_PATH="$2"; echo PROJ_PATH=${PROJ_PATH}; shift; shift ;;
+    --skip-resources ) NO_RES=$1; echo NO_RES=${NO_RES}; shift ;;
+    --main ) BLD_MAIN=$1; echo BLD_MAIN=${BLD_MAIN}; shift ;;
+    --python ) BLD_PYTHON=$1; echo BLD_PYTHON=${BLD_PYTHON}; shift ;;
+    --nuxt ) BLD_NUXT=$1; echo BLD_NUXT=${BLD_NUXT}; shift ;;
+    --node ) BLD_NODE=$1; echo BLD_NODE=${BLD_NODE}; shift ;;
+    "" ) break ;;
+    * ) shift ;;
   esac
 done
 
-[ ! -d ${PROJ_NAME} ] && git clone -q --recursive ${PROJ_GIT_URL} -b ${PROJ_GIT_BRANCH} ${PROJ_NAME}
-[ ! "${PROJ_NAME}" == "." ] && cd ${PROJ_NAME}
-./scripts/base/00-git-HEAD.sh .GITCOMMIT
-
-[ -z "${NO_RM}" ] && ([ -d /tmp/${IMAGE_NAME} ] && rm -rf /tmp/${IMAGE_NAME}; mkdir /tmp/${IMAGE_NAME}; mv .git* /tmp/${IMAGE_NAME}/;\
-rm -rf scripts/deliver/pack* scripts/docker/build*;\
-rm -rf scripts/{ansible,deliver}; [ -z "${IMAGE_SUFFIX}" ] && rm -rf scripts/{dev,gauges};\
-rm -rf scripts/host/{00,01}-git*.sh)
+# 目录不存在则 git clone
+[ ! -d ${PROJ_PATH} ] && git clone -q --recursive ${PROJ_GIT_URL} -b ${PROJ_GIT_BRANCH} ${PROJ_PATH}
+[ ! "${PROJ_PATH}" == "." ] && cd ${PROJ_PATH}
+echo "[0]PWD=`pwd`"; ./scripts/base/00-git-HEAD.sh .GITCOMMIT # git 基本信息：当前提交，父提交, 子模块（可用作“版本”标记）
+echo "[1]TMP=${PROJ_TMP}"; mkdir -p "${PROJ_TMP}"; mv .git* ${PROJ_TMP}/; # 暂时移走 git 资源
 
 sed -i "s/PROJ_GIT_DIR=.*/PROJ_GIT_DIR=\/usr\/src\/proj/" scripts/base/environ.sample.rc
 sed -i "s/PROJ_PYTHON_VER=.*/PROJ_PYTHON_VER=/" scripts/base/environ.sample.rc
@@ -55,20 +51,21 @@ sed -i "s/PROJ_LOG_DIR=.*/PROJ_LOG_DIR=\${PROJ_GIT_DIR}\/log/" scripts/base/envi
 sed -i "s/^virtualenv/# virtualenv/" scripts/host/19-uwsgi.sh
 sed -i "s/^# pythonpath/pythonpath/" scripts/host/19-uwsgi.sh
 
-[ ! "${PROJ_NAME}" == "." ] && cd ..
-[ -n "${BLD_PYTHON}" ] && [ -f ${PROJ_NAME}/scripts/docker/Dockerfile-python ] && (\
-    cp ${PROJ_NAME}/scripts/docker/Dockerfile-python Dockerfile; sed -i "s/^COPY src/COPY ${PROJ_NAME}/" Dockerfile;\
-    docker build -t ${IMAGE_NAME}-python .)
-[ -n "${BLD_NODE}" ] && [ -f ${PROJ_NAME}/scripts/docker/Dockerfile-node ] && (\
-    cp ${PROJ_NAME}/scripts/docker/Dockerfile-node Dockerfile; sed -i "s/^COPY src/COPY ${PROJ_NAME}/" Dockerfile;\
-    docker build -t ${IMAGE_NAME}-node .)
-[ -n "${BLD_NUXT}" ] && [ -f ${PROJ_NAME}/scripts/docker/Dockerfile-nuxt ] && (\
-    cp ${PROJ_NAME}/scripts/docker/Dockerfile-nuxt Dockerfile; sed -i "s/^COPY src/COPY ${PROJ_NAME}/" Dockerfile;\
-    docker build -t ${IMAGE_NAME}-nuxt .)
-[ -z "${NO_BLD}" ] && [ -f ${PROJ_NAME}/scripts/docker/Dockerfile ] && (\
-    cp ${PROJ_NAME}/scripts/docker/Dockerfile .; sed -i "s/^COPY src/COPY ${PROJ_NAME}/" Dockerfile;\
-    docker build -t ${IMAGE_NAME}${IMAGE_SUFFIX} .)
+build_image() {
+    # 替换 src 为目录名，方可保证资源能正确处理
+    [ -f ${PROJ_PATH}/scripts/docker/Dockerfile-${1} ] && (\
+        cp ${PROJ_PATH}/scripts/docker/Dockerfile-${1} Dockerfile;\
+        sed -i "s|^COPY src|COPY `basename ${PROJ_PATH}`|" Dockerfile;\
+        docker build -t ${IMAGE_NAME}-${2:-$1} .)
+}
+[ ! "${PROJ_PATH}" == "." ] && cd .. # 如果非当前目录，需要切换到上层目录 COPY 才会生效
+echo "[2]PWD=`pwd`"; # 开始构建镜像
+[ -n "${BLD_PYTHON}" ] && build_image python
+[ -n "${BLD_NODE}"   ] && build_image node
+[ -n "${BLD_NUXT}"   ] && build_image nuxt
+[ -n "${BLD_MAIN}"   ] && build_image main gauge
 
-[ ! "${PROJ_NAME}" == "." ] && cd ${PROJ_NAME}
-[ -z "${NO_RM}" ] && [ -d /tmp/${IMAGE_NAME} ] && mv /tmp/${IMAGE_NAME}/.git* ./
+# 移回 git 资源，并清理改动
+[ ! "${PROJ_PATH}" == "." ] && cd ${PROJ_PATH}
+echo "[3]PWD=`pwd`"; [ -d ${PROJ_TMP} ] && mv ${PROJ_TMP}/.git* ./ && rmdir ${PROJ_TMP}
 git reset --hard HEAD

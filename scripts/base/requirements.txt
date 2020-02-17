@@ -32,7 +32,7 @@ xlrd==1.2.0
 xlutils==2.0.0
 xlwt==1.3.0
 
-git+https://github.com/princeofdatamining/django_celery_management.git
+# git+https://github.com/princeofdatamining/django_celery_management.git
 django-celery-beat==1.5.0
 django-timezone-field==3.1
 python-crontab==2.4.0
